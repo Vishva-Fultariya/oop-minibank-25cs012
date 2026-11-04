@@ -1,0 +1,44 @@
+
+import java.util.Objects;
+
+public class Card {
+
+    // Private instance variables
+    private String rank;
+    private String suit;
+
+    // Constructor
+    public Card(String rank, String suit) {
+        this.rank = rank;
+        this.suit = suit;
+    }
+
+    // Display card in readable format
+    @Override
+    public String toString() {
+        return rank + " of " + suit;
+    }
+
+    // Compare two cards
+    @Override
+    public boolean equals(Object obj) {
+
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Card other = (Card) obj;
+
+        return rank.equals(other.rank) && suit.equals(other.suit);
+    }
+
+    // Generate hash code
+    @Override
+    public int hashCode() {
+        return Objects.hash(rank, suit);
+    }
+}

@@ -41,7 +41,7 @@ public class MiniBank {
         System.out.println("Email: " + customer.getEmail());
         System.out.println("Mobile: " + customer.getMobile());
 
-        // Create three Account objects inside an array
+        // Create three Account objects
         Account[] accounts = {
             new Account("Vishva", 5000),
             new Account("Dhruvi", 2000),
@@ -60,28 +60,71 @@ public class MiniBank {
                 + accounts[0].withdraw(10000));
 
         accounts[1].deposit(500);
-
         accounts[2].deposit(1000);
 
-        // Display all account balances
-        System.out.println("\n===== ACCOUNT DETAILS =====");
+        // Demonstrate toString()
+        System.out.println("\n===== ACCOUNT DETAILS (toString) =====");
 
         for (Account account : accounts) {
-
-            System.out.println("Account Number: "
-                    + account.getAccountNumber());
-
-            System.out.println("Owner: "
-                    + account.getOwnerName());
-
-            System.out.println("Balance: "
-                    + account.getBalance());
-
-            System.out.println("Active: "
-                    + account.isActive());
-
-            System.out.println("-------------------------");
+            System.out.println(account);
         }
+
+        // Demonstrate equals()
+        System.out.println("\n===== ACCOUNT EQUALITY =====");
+
+        Account account1 = accounts[0];
+        Account account2 = accounts[1];
+
+        System.out.println("Account 1: " + account1.getAccountNumber());
+        System.out.println("Account 2: " + account2.getAccountNumber());
+
+        System.out.println("Are both accounts equal? "
+                + account1.equals(account2));
+
+        // Demonstrate instanceof
+        System.out.println("\n===== INSTANCEOF DEMONSTRATION =====");
+
+        Object obj = accounts[0];
+
+        if (obj instanceof Account) {
+            System.out.println("The object belongs to Account class.");
+        }
+
+        // Demonstrate static nested Address class
+        System.out.println("\n===== CUSTOMER ADDRESS =====");
+
+        Customer.Address address = new Customer.Address(
+                "ABC Road",
+                "Anand",
+                "388001"
+        );
+
+        customer.setAddress(address);
+
+        System.out.println("Address: " + customer.getAddress());
+
+        // Demonstrate clone()
+        System.out.println("\n===== CUSTOMER CLONING =====");
+
+        Customer clonedCustomer = customer.clone();
+
+        System.out.println("Original Customer ID: "
+                + customer.getCustomerId());
+
+        System.out.println("Cloned Customer ID: "
+                + clonedCustomer.getCustomerId());
+
+        System.out.println("Original Customer Name: "
+                + customer.getName());
+
+        System.out.println("Cloned Customer Name: "
+                + clonedCustomer.getName());
+
+        System.out.println("Are both customer objects same? "
+                + (customer == clonedCustomer));
+
+        System.out.println("Do both customers share the same address? "
+                + (customer.getAddress() == clonedCustomer.getAddress()));
 
         // Existing MiniBank menu
         int choice;
@@ -99,7 +142,6 @@ public class MiniBank {
             System.out.print("Enter your choice: ");
 
             if (!sc.hasNextInt()) {
-
                 System.out.println(
                         "Invalid input! Please enter a number.");
 
@@ -120,7 +162,6 @@ public class MiniBank {
             };
 
             if (option == null) {
-
                 System.out.println(
                         "Invalid choice! Please select 1 to 5.");
 
@@ -128,7 +169,6 @@ public class MiniBank {
             }
 
             if (option == MenuOption.EXIT) {
-
                 System.out.println(
                         "Thank you for using MiniBank!");
 
