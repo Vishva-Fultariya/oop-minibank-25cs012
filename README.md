@@ -83,10 +83,51 @@ javac .\lab-01\Practical-3\RPSLS.java
 java -cp .\lab-01\Practical-3 RPSLS
 ```
 
+## Lab 02 – Part A
+
+1. Smart Thermostat – Constructors, static members and encapsulation.
+2. Cinema Show – Constructor overloading, static variables and seat booking.
+3. Parking Lot – Object-oriented parking management and static revenue.
+
+## Lab 02 – Part B
+
+MiniBank enhancements:
+
+- Customer class with automatically generated customer IDs.
+- Account class with automatically generated account numbers.
+- Encapsulated account balance.
+- Constructor overloading and constructor chaining.
+- Deposit and withdrawal operations.
+- Array of Account objects.
+- Balance and account information getters.
+
+## Lab 02 – Compile and Run
+
+### Smart Thermostat
+
+```powershell
+javac .\lab-02\Practical-1\Thermostat.java
+java -cp .\lab-02\Practical-1 Thermostat
+```
+
+### Cinema Show
+
+```powershell
+javac .\lab-02\Practical-2\CinemaShow.java
+java -cp .\lab-02\Practical-2 CinemaShow
+```
+
+### Parking Lot
+
+```powershell
+javac .\lab-02\Practical-3\ParkingLot.java
+java -cp .\lab-02\Practical-3 ParkingLot
+```
+
 ### MiniBank
 
 ```powershell
-javac .\Miniproject\src\MiniBank.java
+javac .\Miniproject\src\MiniBank.java .\Miniproject\src\Customer.java .\Miniproject\src\Account.java
 java -cp .\Miniproject\src MiniBank
 ```
 
