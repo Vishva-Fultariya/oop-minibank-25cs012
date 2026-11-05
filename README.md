@@ -15,7 +15,7 @@ This repository contains the practical implementations and MiniBank project deve
 
 The repository is divided into two parts:
 
-- **Part A:** Practice Programs for each laboratory.
+- **Part A:** Practice programs for each laboratory.
 - **Part B:** MiniBank, a semester-long console banking application.
 
 ## Repository Structure
@@ -61,17 +61,29 @@ oop-minibank-25cs012/
 │       ├── TemplateFiller.java
 │       └── Driver.java
 │
+├── lab-05/
+│   ├── Practical-1/
+│   │   └── ShapeAreas.java
+│   ├── Practical-2/
+│   │   └── Payroll.java
+│   └── Practical-3/
+│       └── MediaLateFees.java
+│
 ├── Miniproject/
 │   └── src/
 │       ├── MiniBank.java
 │       ├── Customer.java
 │       ├── Account.java
+│       ├── SavingsAccount.java
+│       ├── CurrentAccount.java
+│       ├── FixedDepositAccount.java
 │       ├── Validator.java
 │       ├── TransactionType.java
 │       ├── Command.java
 │       ├── CommandParser.java
 │       └── StatementFormatter.java
 │
+├── .gitignore
 └── README.md
 ```
 
@@ -160,9 +172,44 @@ MiniBank enhancements:
 - **StatementFormatter class:** Generates formatted account statements using StringBuilder.
 - **MiniBank integration:** Demonstrates validation, command parsing and account statement generation.
 
+## Lab 05 – Part A
+
+1. **Shape Areas** – Abstract classes, inheritance and polymorphism.
+   - Implements an abstract Shape class.
+   - Uses Circle, Rectangle and Triangle subclasses.
+   - Demonstrates method overriding and runtime polymorphism.
+   - Calculates individual areas, total area and the largest shape.
+
+2. **Employee Payroll** – Abstract classes, constructors, `super` and `instanceof`.
+   - Implements an abstract Employee class.
+   - Uses FullTimeEmployee and PartTimeEmployee subclasses.
+   - Demonstrates constructor chaining and method overriding.
+   - Calculates individual salaries and total payroll.
+   - Identifies employee types using `instanceof`.
+
+3. **Media Late Fees** – Inheritance and polymorphism.
+   - Implements an abstract Media class.
+   - Uses Book, DVD and Magazine subclasses.
+   - Calculates late fees using overridden methods.
+   - Demonstrates runtime polymorphism using a Media array.
+
+## Lab 05 – Part B
+
+MiniBank enhancements:
+
+- Converted Account into an abstract class.
+- Created SavingsAccount, CurrentAccount and FixedDepositAccount subclasses.
+- Implemented account-specific interest calculation.
+- Savings Account interest rate: 4%.
+- Current Account interest rate: 0%.
+- Fixed Deposit Account interest rate: 7%.
+- Demonstrated runtime polymorphism using an Account array.
+- Demonstrated pattern matching with `instanceof`.
+- Integrated the new account types into the existing MiniBank application.
+
 ## Requirements
 
-- Java Development Kit (JDK) 17 or above.
+- Java Development Kit (JDK) 21.
 - Visual Studio Code or another Java IDE.
 - Git.
 
@@ -274,6 +321,35 @@ java Driver
 cd ..\..
 ```
 
+### Lab 05 – Part A
+
+**Shape Areas**
+
+```powershell
+cd .\lab-05\Practical-1
+javac *.java
+java ShapeAreas
+cd ..\..
+```
+
+**Employee Payroll**
+
+```powershell
+cd .\lab-05\Practical-2
+javac *.java
+java Payroll
+cd ..\..
+```
+
+**Media Late Fees**
+
+```powershell
+cd .\lab-05\Practical-3
+javac *.java
+java MediaLateFees
+cd ..\..
+```
+
 ### MiniBank – Part B
 
 Compile and run all MiniBank source files:
@@ -293,6 +369,7 @@ The following Git tags mark the completion of each laboratory:
 - `lab-02` – Lab 02 completed.
 - `lab-03` – Lab 03 completed.
 - `lab-04` – Lab 04 completed.
+- `lab-05` – Lab 05 completed.
 
 ## Author
 

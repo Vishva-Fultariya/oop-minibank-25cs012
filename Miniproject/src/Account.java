@@ -1,6 +1,7 @@
+
 import java.util.Objects;
 
-public class Account {
+public abstract class Account {
 
     // Private instance variables
     private final String accountNumber;
@@ -12,7 +13,7 @@ public class Account {
     private static int accountCounter = 1;
 
     // Parameterized constructor
-    public Account(String ownerName, long openingBalance) {
+    protected Account(String ownerName, long openingBalance) {
 
         this.accountNumber =
                 String.format("AC%04d", accountCounter++);
@@ -23,10 +24,12 @@ public class Account {
     }
 
     // Constructor chaining
-    public Account(String ownerName) {
-
+    protected Account(String ownerName) {
         this(ownerName, 0);
     }
+
+    // Abstract method for calculating interest
+    public abstract double calculateInterest();
 
     // Deposit method
     public void deposit(long amount) {
@@ -45,7 +48,6 @@ public class Account {
     public boolean withdraw(long amount) {
 
         if (amount <= 0 || amount > balance) {
-
             return false;
         }
 
@@ -56,37 +58,34 @@ public class Account {
 
     // Getter for account number
     public String getAccountNumber() {
-
         return accountNumber;
     }
 
     // Getter for owner name
     public String getOwnerName() {
-
         return ownerName;
     }
 
     // Getter for balance
     public long getBalance() {
-
         return balance;
     }
 
     // Getter for active status
     public boolean isActive() {
-
         return active;
     }
 
     @Override
     public String toString() {
         return "Account Number: " + accountNumber +
-            ", Owner: " + ownerName +
-            ", Balance: " + balance;
+                ", Owner: " + ownerName +
+                ", Balance: " + balance;
     }
 
     @Override
     public boolean equals(Object obj) {
+
         if (this == obj) {
             return true;
         }
@@ -104,5 +103,4 @@ public class Account {
     public int hashCode() {
         return Objects.hash(accountNumber);
     }
-
 }

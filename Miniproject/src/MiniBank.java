@@ -41,11 +41,11 @@ public class MiniBank {
         System.out.println("Email: " + customer.getEmail());
         System.out.println("Mobile: " + customer.getMobile());
 
-        // Create three Account objects
+        // Create different account types
         Account[] accounts = {
-            new Account("Vishva", 5000),
-            new Account("Dhruvi", 2000),
-            new Account("Madhav")
+            new SavingsAccount("Vishva", 5000),
+            new CurrentAccount("Dhruvi", 2000),
+            new FixedDepositAccount("Madhav", 0)
         };
 
         // Perform deposits and withdrawals
@@ -81,13 +81,40 @@ public class MiniBank {
         System.out.println("Are both accounts equal? "
                 + account1.equals(account2));
 
-        // Demonstrate instanceof
-        System.out.println("\n===== INSTANCEOF DEMONSTRATION =====");
+        // Demonstrate runtime polymorphism
+        System.out.println("\n===== RUNTIME POLYMORPHISM =====");
 
-        Object obj = accounts[0];
+        for (Account account : accounts) {
 
-        if (obj instanceof Account) {
-            System.out.println("The object belongs to Account class.");
+            System.out.println("Account Holder: "
+                    + account.getOwnerName());
+
+            System.out.printf("Balance: Rs. %d%n",
+                    account.getBalance());
+
+            System.out.printf("Interest: Rs. %.2f%n",
+                    account.calculateInterest());
+
+            System.out.println("----------------------------");
+        }
+
+        // Demonstrate pattern matching with instanceof
+        System.out.println("\n===== INSTANCEOF PATTERN MATCHING =====");
+
+        for (Account account : accounts) {
+
+            if (account instanceof SavingsAccount savings) {
+                System.out.println(savings.getOwnerName()
+                        + " has a Savings Account.");
+
+            } else if (account instanceof CurrentAccount current) {
+                System.out.println(current.getOwnerName()
+                        + " has a Current Account.");
+
+            } else if (account instanceof FixedDepositAccount fixed) {
+                System.out.println(fixed.getOwnerName()
+                        + " has a Fixed Deposit Account.");
+            }
         }
 
         // Demonstrate static nested Address class
