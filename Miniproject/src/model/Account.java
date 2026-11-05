@@ -1,18 +1,16 @@
+package model;
 
 import java.util.Objects;
 
-public abstract class Account {
+public abstract class Account implements Transactable, InterestBearing {
 
-    // Private instance variables
     private final String accountNumber;
     private String ownerName;
     private long balance;
     private boolean active;
 
-    // Static counter for generating account numbers
     private static int accountCounter = 1;
 
-    // Parameterized constructor
     protected Account(String ownerName, long openingBalance) {
 
         this.accountNumber =
@@ -23,15 +21,13 @@ public abstract class Account {
         this.active = true;
     }
 
-    // Constructor chaining
     protected Account(String ownerName) {
         this(ownerName, 0);
     }
 
-    // Abstract method for calculating interest
     public abstract double calculateInterest();
 
-    // Deposit method
+    @Override
     public void deposit(long amount) {
 
         if (amount <= 0) {
@@ -44,10 +40,10 @@ public abstract class Account {
         System.out.println("Deposit successful: " + amount);
     }
 
-    // Withdraw method
+    @Override
     public boolean withdraw(long amount) {
 
-        if (amount <= 0 || amount > balance) {
+        if (amount <= 0 || amount > balance || !active) {
             return false;
         }
 
@@ -56,22 +52,19 @@ public abstract class Account {
         return true;
     }
 
-    // Getter for account number
     public String getAccountNumber() {
         return accountNumber;
     }
 
-    // Getter for owner name
     public String getOwnerName() {
         return ownerName;
     }
 
-    // Getter for balance
-    public long getBalance() {
+    @Override
+    public double getBalance() {
         return balance;
     }
 
-    // Getter for active status
     public boolean isActive() {
         return active;
     }

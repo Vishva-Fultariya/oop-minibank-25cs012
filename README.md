@@ -24,64 +24,52 @@ The repository is divided into two parts:
 oop-minibank-25cs012/
 │
 ├── lab-01/
-│   ├── Practical-1/
-│   │   └── VendingMachine.java
-│   ├── Practical-2/
-│   │   └── TollBooth.java
-│   └── Practical-3/
-│       └── RPSLS.java
-│
 ├── lab-02/
-│   ├── Practical-1/
-│   │   └── Thermostat.java
-│   ├── Practical-2/
-│   │   └── CinemaShow.java
-│   └── Practical-3/
-│       └── ParkingLot.java
-│
 ├── lab-03/
-│   ├── Practical-1/
-│   │   ├── Point.java
-│   │   └── Driver.java
-│   ├── Practical-2/
-│   │   ├── Card.java
-│   │   └── Driver.java
-│   └── Practical-3/
-│       ├── Fraction.java
-│       └── Driver.java
-│
 ├── lab-04/
-│   ├── Practical-1/
-│   │   ├── PasswordChecker.java
-│   │   └── Driver.java
-│   ├── Practical-2/
-│   │   ├── ChatFilter.java
-│   │   └── Driver.java
-│   └── Practical-3/
-│       ├── TemplateFiller.java
-│       └── Driver.java
-│
 ├── lab-05/
+│
+├── lab-06/
 │   ├── Practical-1/
-│   │   └── ShapeAreas.java
+│   │   └── RemoteControl.java
 │   ├── Practical-2/
-│   │   └── Payroll.java
+│   │   └── NotificationSenders.java
 │   └── Practical-3/
-│       └── MediaLateFees.java
+│       ├── src/
+│       │   ├── app/
+│       │   │   └── DiscountEngine.java
+│       │   └── discount/
+│       │       └── DiscountRule.java
+│       ├── manifest.txt
+│       └── DiscountEngine.jar
 │
 ├── Miniproject/
-│   └── src/
-│       ├── MiniBank.java
-│       ├── Customer.java
-│       ├── Account.java
-│       ├── SavingsAccount.java
-│       ├── CurrentAccount.java
-│       ├── FixedDepositAccount.java
-│       ├── Validator.java
-│       ├── TransactionType.java
-│       ├── Command.java
-│       ├── CommandParser.java
-│       └── StatementFormatter.java
+│   ├── src/
+│   │   ├── model/
+│   │   │   ├── Account.java
+│   │   │   ├── SavingsAccount.java
+│   │   │   ├── CurrentAccount.java
+│   │   │   ├── FixedDepositAccount.java
+│   │   │   ├── Customer.java
+│   │   │   ├── Transactable.java
+│   │   │   ├── InterestBearing.java
+│   │   │   └── Premium.java
+│   │   │
+│   │   ├── util/
+│   │   │   ├── Validator.java
+│   │   │   ├── TransactionType.java
+│   │   │   ├── Command.java
+│   │   │   ├── MenuOption.java
+│   │   │   └── BankInfo.java
+│   │   │
+│   │   └── service/
+│   │       ├── MiniBank.java
+│   │       ├── CommandParser.java
+│   │       ├── StatementFormatter.java
+│   │       └── WithdrawRule.java
+│   │
+│   ├── manifest.txt
+│   └── MiniBank.jar
 │
 ├── .gitignore
 └── README.md
@@ -144,10 +132,12 @@ MiniBank enhancements:
 ## Lab 04 – Part A
 
 1. **Password Strength Checker** – Validating password strength using String methods and regular expressions.
+
    - Checks minimum length, uppercase letters, digits and special characters.
    - Classifies passwords as Weak, Medium or Strong.
 
 2. **Chat-Log Filter** – Filtering chat messages using String methods and StringBuilder.
+
    - Reads a search keyword from the user.
    - Splits log entries into time, username and message.
    - Performs case-insensitive keyword searching.
@@ -155,6 +145,7 @@ MiniBank enhancements:
    - Builds a matching report using StringBuilder.
 
 3. **Template Filler** – Replacing placeholders using Regular Expressions.
+
    - Uses Pattern and Matcher classes.
    - Identifies placeholders in a template.
    - Replaces placeholders with corresponding values.
@@ -175,12 +166,14 @@ MiniBank enhancements:
 ## Lab 05 – Part A
 
 1. **Shape Areas** – Abstract classes, inheritance and polymorphism.
+
    - Implements an abstract Shape class.
    - Uses Circle, Rectangle and Triangle subclasses.
    - Demonstrates method overriding and runtime polymorphism.
    - Calculates individual areas, total area and the largest shape.
 
 2. **Employee Payroll** – Abstract classes, constructors, `super` and `instanceof`.
+
    - Implements an abstract Employee class.
    - Uses FullTimeEmployee and PartTimeEmployee subclasses.
    - Demonstrates constructor chaining and method overriding.
@@ -188,6 +181,7 @@ MiniBank enhancements:
    - Identifies employee types using `instanceof`.
 
 3. **Media Late Fees** – Inheritance and polymorphism.
+
    - Implements an abstract Media class.
    - Uses Book, DVD and Magazine subclasses.
    - Calculates late fees using overridden methods.
@@ -206,6 +200,52 @@ MiniBank enhancements:
 - Demonstrated runtime polymorphism using an Account array.
 - Demonstrated pattern matching with `instanceof`.
 - Integrated the new account types into the existing MiniBank application.
+
+## Lab 06 – Part A
+
+1. **Remote Control System** – Interfaces, default methods, arrays of interface references, anonymous classes and lambda expressions.
+
+   - Defines a `Switchable` interface with `on()`, `off()` and `toggle()`.
+   - Implements Fan and Light devices.
+   - Demonstrates runtime polymorphism using a `Switchable` array.
+   - Defines a functional interface for device switching permissions.
+   - Demonstrates the permission rule using both an anonymous class and a lambda expression.
+
+2. **Notification Sender System** – Functional interfaces, lambda expressions and marker interfaces.
+
+   - Defines a functional `Notifier` interface.
+   - Implements Email and SMS notification senders using lambda expressions.
+   - Broadcasts messages through an array of notification senders.
+   - Defines an `Urgent` marker interface.
+   - Demonstrates additional notifications for urgent senders.
+
+3. **Discount Engine** – Functional interfaces, lambda expressions, packages and runnable JAR creation.
+
+   - Defines a functional `DiscountRule` interface.
+   - Implements discount rules using lambda expressions.
+   - Allows the user to select a discount rule at runtime.
+   - Applies selected discounts to a list of prices.
+   - Calculates the final total and savings.
+   - Organises the program into `app` and `discount` packages.
+   - Builds and executes a runnable JAR.
+
+## Lab 06 – Part B
+
+MiniBank enhancements:
+
+- Created the `Transactable` interface for deposit and withdrawal operations.
+- Updated Account to implement `Transactable`.
+- Created the `InterestBearing` interface with default methods for yearly and monthly interest calculations.
+- Created the functional `WithdrawRule` interface.
+- Demonstrated withdrawal rules using an anonymous class and a lambda expression.
+- Created the `Premium` marker interface and implemented it in FixedDepositAccount.
+- Organised the MiniBank application into three packages:
+  - `model` – Account-related classes and interfaces.
+  - `util` – Validation, transaction types, commands and supporting definitions.
+  - `service` – Main application, command parsing, statement formatting and withdrawal rules.
+- Demonstrated static imports for Validator methods.
+- Created a manifest specifying the main class.
+- Built and successfully executed the runnable `MiniBank.jar`.
 
 ## Requirements
 
@@ -350,15 +390,64 @@ java MediaLateFees
 cd ..\..
 ```
 
-### MiniBank – Part B
+### Lab 06 – Part A
 
-Compile and run all MiniBank source files:
+**Remote Control System**
 
 ```powershell
-cd .\Miniproject\src
-javac *.java
-java MiniBank
+cd .\lab-06\Practical-1
+javac RemoteControl.java
+java RemoteControl
 cd ..\..
+```
+
+**Notification Sender System**
+
+```powershell
+cd .\lab-06\Practical-2
+javac NotificationSenders.java
+java NotificationSenders
+cd ..\..
+```
+
+**Discount Engine – Run from JAR**
+
+```powershell
+java -jar .\lab-06\Practical-3\DiscountEngine.jar
+```
+
+To compile the Discount Engine from source:
+
+```powershell
+cd .\lab-06\Practical-3
+New-Item -ItemType Directory -Force out
+javac -d out src\discount\DiscountRule.java src\app\DiscountEngine.java
+java -cp out app.DiscountEngine
+cd ..\..
+```
+
+### MiniBank – Part B
+
+**Run the prebuilt runnable JAR**
+
+```powershell
+java -jar .\Miniproject\MiniBank.jar
+```
+
+**Compile from source**
+
+```powershell
+cd .\Miniproject
+New-Item -ItemType Directory -Force build
+$files = Get-ChildItem -Recurse src -Filter *.java | ForEach-Object { $_.FullName }
+javac -d build $files
+```
+
+**Run the compiled application**
+
+```powershell
+java -cp build service.MiniBank
+cd ..
 ```
 
 ## Git Tags
@@ -370,6 +459,7 @@ The following Git tags mark the completion of each laboratory:
 - `lab-03` – Lab 03 completed.
 - `lab-04` – Lab 04 completed.
 - `lab-05` – Lab 05 completed.
+- `lab-06` – Lab 06 completed.
 
 ## Author
 

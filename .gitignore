@@ -1,3 +1,7 @@
 
 # Ignore compiled Java files
 *.class
+
+# Build output
+Miniproject/build/
+Miniproject/out/

@@ -1,18 +1,21 @@
+package service;
 
 import java.util.Scanner;
 
-// Record to store bank information
-record BankInfo(String name, String branch) {
-}
+import model.Account;
+import model.Customer;
+import model.SavingsAccount;
+import model.CurrentAccount;
+import model.FixedDepositAccount;
+import model.InterestBearing;
+import model.Premium;
 
-// Enum representing available banking operations
-enum MenuOption {
-    OPEN_ACCOUNT,
-    DEPOSIT,
-    WITHDRAW,
-    TRANSFER,
-    EXIT
-}
+import util.BankInfo;
+import util.MenuOption;
+import util.Command;
+import util.TransactionType;
+
+import static util.Validator.*;
 
 public class MiniBank {
 
@@ -89,13 +92,45 @@ public class MiniBank {
             System.out.println("Account Holder: "
                     + account.getOwnerName());
 
-            System.out.printf("Balance: Rs. %d%n",
-                    account.getBalance());
+            System.out.printf("Balance: Rs. %.2f%n",
+                        account.getBalance());
 
             System.out.printf("Interest: Rs. %.2f%n",
                     account.calculateInterest());
 
             System.out.println("----------------------------");
+        }
+
+        // Demonstrate InterestBearing default methods
+        System.out.println("\n===== INTEREST BEARING INTERFACE =====");
+
+        for (Account account : accounts) {
+
+            if (account instanceof InterestBearing interestAccount) {
+
+                System.out.println("Account Holder: "
+                        + account.getOwnerName());
+
+                System.out.printf("Yearly Interest: Rs. %.2f%n",
+                        interestAccount.yearlyInterest());
+
+                System.out.printf("Monthly Interest: Rs. %.2f%n",
+                        interestAccount.monthlyInterest());
+            }
+        }
+
+        // Demonstrate Premium marker interface
+        System.out.println("\n===== PREMIUM MARKER INTERFACE =====");
+
+        for (Account account : accounts) {
+
+            if (account instanceof Premium) {
+                System.out.println(account.getOwnerName()
+                        + " has a Premium Account.");
+            } else {
+                System.out.println(account.getOwnerName()
+                        + " does not have a Premium Account.");
+            }
         }
 
         // Demonstrate pattern matching with instanceof
@@ -153,34 +188,34 @@ public class MiniBank {
         System.out.println("Do both customers share the same address? "
                 + (customer.getAddress() == clonedCustomer.getAddress()));
 
-        // Practical 04: Validator demonstration
+        // Validator demonstration using static import
         System.out.println("\n===== VALIDATOR TESTING =====");
 
         System.out.println("Valid Mobile: "
-                + Validator.isValidMobile("9876543210"));
+                + isValidMobile("9876543210"));
 
         System.out.println("Invalid Mobile: "
-                + Validator.isValidMobile("12345"));
+                + isValidMobile("12345"));
 
         System.out.println("Valid Email: "
-                + Validator.isValidEmail("vishva@example.com"));
+                + isValidEmail("vishva@example.com"));
 
         System.out.println("Invalid Email: "
-                + Validator.isValidEmail("vishvaexample.com"));
+                + isValidEmail("vishvaexample.com"));
 
         System.out.println("Valid PAN: "
-                + Validator.isValidPan("ABCDE1234F"));
+                + isValidPan("ABCDE1234F"));
 
         System.out.println("Invalid PAN: "
-                + Validator.isValidPan("ABC123"));
+                + isValidPan("ABC123"));
 
         System.out.println("Valid IFSC: "
-                + Validator.isValidIfsc("SBIN0001234"));
+                + isValidIfsc("SBIN0001234"));
 
         System.out.println("Invalid IFSC: "
-                + Validator.isValidIfsc("SBI123"));
+                + isValidIfsc("SBI123"));
 
-        // Practical 04: Command Parser demonstration
+        // Command Parser demonstration
         System.out.println("\n===== COMMAND PARSER TESTING =====");
 
         String commandLine = "DEPOSIT AC0001 500";
@@ -192,13 +227,47 @@ public class MiniBank {
         System.out.println("Account Number: " + command.accountNumber());
         System.out.println("Amount: " + command.amount());
 
-        // Practical 04: Statement Formatter demonstration
+        // Statement Formatter demonstration
         System.out.println("\n===== ACCOUNT STATEMENT =====");
 
         String statement =
                 StatementFormatter.buildStatement(accounts[0]);
 
         System.out.println(statement);
+
+        // WithdrawRule demonstration using anonymous class
+        System.out.println("\n===== WITHDRAW RULE: ANONYMOUS CLASS =====");
+
+        WithdrawRule anonymousRule = new WithdrawRule() {
+
+            @Override
+            public boolean allow(Account account, long amount) {
+
+                return account.isActive()
+                        && amount > 0
+                        && amount <= account.getBalance();
+            }
+        };
+
+        System.out.println("Allow withdrawal of Rs. 1000: "
+                + anonymousRule.allow(accounts[0], 1000));
+
+        System.out.println("Allow withdrawal of Rs. 100000: "
+                + anonymousRule.allow(accounts[0], 100000));
+
+        // WithdrawRule demonstration using lambda
+        System.out.println("\n===== WITHDRAW RULE: LAMBDA EXPRESSION =====");
+
+        WithdrawRule lambdaRule = (account, amount) ->
+                account.isActive()
+                && amount > 0
+                && amount <= account.getBalance();
+
+        System.out.println("Allow withdrawal of Rs. 1000: "
+                + lambdaRule.allow(accounts[0], 1000));
+
+        System.out.println("Allow withdrawal of Rs. 100000: "
+                + lambdaRule.allow(accounts[0], 100000));
 
         // Existing MiniBank menu
         int choice;
