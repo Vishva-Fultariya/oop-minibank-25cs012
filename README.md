@@ -25,13 +25,19 @@ oop-minibank-25cs012/
 │
 ├── lab-01/
 │   ├── Practical-1/
+│   │   └── VendingMachine.java
 │   ├── Practical-2/
+│   │   └── TollBooth.java
 │   └── Practical-3/
+│       └── RPSLS.java
 │
 ├── lab-02/
 │   ├── Practical-1/
+│   │   └── Thermostat.java
 │   ├── Practical-2/
+│   │   └── CinemaShow.java
 │   └── Practical-3/
+│       └── ParkingLot.java
 │
 ├── lab-03/
 │   ├── Practical-1/
@@ -44,11 +50,27 @@ oop-minibank-25cs012/
 │       ├── Fraction.java
 │       └── Driver.java
 │
+├── lab-04/
+│   ├── Practical-1/
+│   │   ├── PasswordChecker.java
+│   │   └── Driver.java
+│   ├── Practical-2/
+│   │   ├── ChatFilter.java
+│   │   └── Driver.java
+│   └── Practical-3/
+│       ├── TemplateFiller.java
+│       └── Driver.java
+│
 ├── Miniproject/
 │   └── src/
 │       ├── MiniBank.java
 │       ├── Customer.java
-│       └── Account.java
+│       ├── Account.java
+│       ├── Validator.java
+│       ├── TransactionType.java
+│       ├── Command.java
+│       ├── CommandParser.java
+│       └── StatementFormatter.java
 │
 └── README.md
 ```
@@ -106,6 +128,37 @@ MiniBank enhancements:
 - Implementing object cloning using `Cloneable` and `clone()`.
 - Demonstrating the `instanceof` operator.
 - Demonstrating shallow cloning of Customer objects.
+
+## Lab 04 – Part A
+
+1. **Password Strength Checker** – Validating password strength using String methods and regular expressions.
+   - Checks minimum length, uppercase letters, digits and special characters.
+   - Classifies passwords as Weak, Medium or Strong.
+
+2. **Chat-Log Filter** – Filtering chat messages using String methods and StringBuilder.
+   - Reads a search keyword from the user.
+   - Splits log entries into time, username and message.
+   - Performs case-insensitive keyword searching.
+   - Skips malformed log entries.
+   - Builds a matching report using StringBuilder.
+
+3. **Template Filler** – Replacing placeholders using Regular Expressions.
+   - Uses Pattern and Matcher classes.
+   - Identifies placeholders in a template.
+   - Replaces placeholders with corresponding values.
+   - Handles missing values using `[?]`.
+   - Builds the final output using StringBuilder.
+
+## Lab 04 – Part B
+
+MiniBank enhancements:
+
+- **Validator class:** Validates mobile numbers, email addresses, PAN numbers and IFSC codes using compiled regular expressions.
+- **TransactionType enum:** Defines DEPOSIT, WITHDRAW and TRANSFER transaction types.
+- **Command record:** Stores transaction type, account number and transaction amount.
+- **CommandParser class:** Parses transaction commands and converts them into Command records.
+- **StatementFormatter class:** Generates formatted account statements using StringBuilder.
+- **MiniBank integration:** Demonstrates validation, command parsing and account statement generation.
 
 ## Requirements
 
@@ -192,6 +245,35 @@ java Driver
 cd ..\..
 ```
 
+### Lab 04 – Part A
+
+**Password Strength Checker**
+
+```powershell
+cd .\lab-04\Practical-1
+javac *.java
+java Driver
+cd ..\..
+```
+
+**Chat-Log Filter**
+
+```powershell
+cd .\lab-04\Practical-2
+javac *.java
+java Driver
+cd ..\..
+```
+
+**Template Filler**
+
+```powershell
+cd .\lab-04\Practical-3
+javac *.java
+java Driver
+cd ..\..
+```
+
 ### MiniBank – Part B
 
 Compile and run all MiniBank source files:
@@ -210,6 +292,7 @@ The following Git tags mark the completion of each laboratory:
 - `lab-01` – Lab 01 completed.
 - `lab-02` – Lab 02 completed.
 - `lab-03` – Lab 03 completed.
+- `lab-04` – Lab 04 completed.
 
 ## Author
 

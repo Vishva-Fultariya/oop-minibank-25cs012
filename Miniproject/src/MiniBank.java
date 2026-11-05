@@ -126,6 +126,53 @@ public class MiniBank {
         System.out.println("Do both customers share the same address? "
                 + (customer.getAddress() == clonedCustomer.getAddress()));
 
+        // Practical 04: Validator demonstration
+        System.out.println("\n===== VALIDATOR TESTING =====");
+
+        System.out.println("Valid Mobile: "
+                + Validator.isValidMobile("9876543210"));
+
+        System.out.println("Invalid Mobile: "
+                + Validator.isValidMobile("12345"));
+
+        System.out.println("Valid Email: "
+                + Validator.isValidEmail("vishva@example.com"));
+
+        System.out.println("Invalid Email: "
+                + Validator.isValidEmail("vishvaexample.com"));
+
+        System.out.println("Valid PAN: "
+                + Validator.isValidPan("ABCDE1234F"));
+
+        System.out.println("Invalid PAN: "
+                + Validator.isValidPan("ABC123"));
+
+        System.out.println("Valid IFSC: "
+                + Validator.isValidIfsc("SBIN0001234"));
+
+        System.out.println("Invalid IFSC: "
+                + Validator.isValidIfsc("SBI123"));
+
+        // Practical 04: Command Parser demonstration
+        System.out.println("\n===== COMMAND PARSER TESTING =====");
+
+        String commandLine = "DEPOSIT AC0001 500";
+
+        Command command = CommandParser.parse(commandLine);
+
+        System.out.println("Original Command: " + commandLine);
+        System.out.println("Transaction Type: " + command.type());
+        System.out.println("Account Number: " + command.accountNumber());
+        System.out.println("Amount: " + command.amount());
+
+        // Practical 04: Statement Formatter demonstration
+        System.out.println("\n===== ACCOUNT STATEMENT =====");
+
+        String statement =
+                StatementFormatter.buildStatement(accounts[0]);
+
+        System.out.println(statement);
+
         // Existing MiniBank menu
         int choice;
 
