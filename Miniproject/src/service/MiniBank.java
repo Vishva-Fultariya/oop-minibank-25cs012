@@ -1,3 +1,4 @@
+
 package service;
 
 import java.util.Scanner;
@@ -93,7 +94,7 @@ public class MiniBank {
                     + account.getOwnerName());
 
             System.out.printf("Balance: Rs. %.2f%n",
-                        account.getBalance());
+                    account.getBalance());
 
             System.out.printf("Interest: Rs. %.2f%n",
                     account.calculateInterest());
@@ -268,6 +269,60 @@ public class MiniBank {
 
         System.out.println("Allow withdrawal of Rs. 100000: "
                 + lambdaRule.allow(accounts[0], 100000));
+
+        // Custom Annotation and Reflection Validation
+        System.out.println("\n===== CUSTOM ANNOTATION VALIDATION =====");
+
+        // Test 1: Negative balance
+        Account invalidAccount =
+                new SavingsAccount("Test User", -100);
+
+        System.out.println("\nTest 1: Negative Balance");
+
+        String[] invalidErrors =
+                AnnotationValidator.validate(invalidAccount);
+
+        if (invalidErrors.length == 0) {
+            System.out.println("Account is valid.");
+        } else {
+            for (String error : invalidErrors) {
+                System.out.println("Validation Error: " + error);
+            }
+        }
+
+        // Test 2: Valid account
+        Account validAccount =
+                new SavingsAccount("Vishva", 5000);
+
+        System.out.println("\nTest 2: Valid Account");
+
+        String[] validErrors =
+                AnnotationValidator.validate(validAccount);
+
+        if (validErrors.length == 0) {
+            System.out.println("Account is valid.");
+        } else {
+            for (String error : validErrors) {
+                System.out.println("Validation Error: " + error);
+            }
+        }
+
+        // Test 3: Maximum length validation
+        Account longNameAccount =
+                new SavingsAccount("VeryLongStudentName", 5000);
+
+        System.out.println("\nTest 3: Maximum Length Validation");
+
+        String[] lengthErrors =
+                AnnotationValidator.validate(longNameAccount);
+
+        if (lengthErrors.length == 0) {
+            System.out.println("Account is valid.");
+        } else {
+            for (String error : lengthErrors) {
+                System.out.println("Validation Error: " + error);
+            }
+        }
 
         // Existing MiniBank menu
         int choice;
