@@ -89,7 +89,9 @@ public abstract class Account implements Transactable, InterestBearing {
     }
 
     public void transfer(Account to, long amount) throws BankException {
+
         try {
+
             if (to == null) {
                 throw new AccountNotFoundException(
                         "Destination account not found."
@@ -102,41 +104,88 @@ public abstract class Account implements Transactable, InterestBearing {
                 );
             }
 
-            if (!this.isActive()) {
-                throw new BankException("Source account is inactive.");
+            /*
+            * Always acquire account locks in ascending
+            * account-number order.
+            *
+            * This prevents two opposite-direction transfers
+            * from acquiring the same locks in opposite orders.
+            */
+            Account firstLock;
+            Account secondLock;
+
+            if (this.accountNumber.compareTo(to.accountNumber) < 0) {
+                firstLock = this;
+                secondLock = to;
+            } else {
+                firstLock = to;
+                secondLock = this;
             }
 
-            if (!to.isActive()) {
-                throw new BankException("Destination account is inactive.");
-            }
+            synchronized (firstLock) {
 
-            boolean withdrawn = withdraw(amount);
+                synchronized (secondLock) {
 
-            if (!withdrawn) {
-                throw new BankException("Withdrawal could not be completed.");
-            }
+                    if (!this.isActive()) {
+                        throw new BankException(
+                                "Source account is inactive."
+                        );
+                    }
 
-            try {
-                to.deposit(amount);
-            } catch (BankException transferError) {
-                // Restore the sender's money if the receiver deposit fails.
-                try {
-                    this.deposit(amount);
-                } catch (BankException rollbackError) {
-                    transferError.addSuppressed(rollbackError);
+                    if (!to.isActive()) {
+                        throw new BankException(
+                                "Destination account is inactive."
+                        );
+                    }
+
+                    boolean withdrawn = this.withdraw(amount);
+
+                    if (!withdrawn) {
+                        throw new BankException(
+                                "Withdrawal could not be completed."
+                        );
+                    }
+
+                    try {
+
+                        to.deposit(amount);
+
+                    } catch (BankException transferError) {
+
+                        // Roll back the sender's balance if
+                        // the destination deposit fails.
+                        try {
+                            this.deposit(amount);
+
+                        } catch (BankException rollbackError) {
+
+                            transferError.addSuppressed(
+                                    rollbackError
+                            );
+                        }
+
+                        throw transferError;
+                    }
                 }
-
-                throw transferError;
             }
 
-            System.out.println("Transfer successful: Rs. " + amount);
+            System.out.println(
+                    String.format("Transfer successful: Rs. %,.2f", (double) amount)
+            );
 
         } catch (BankException e) {
-            System.out.println("Transfer failed: " + e.getMessage());
+
+            System.out.println(
+                    "Transfer failed: " + e.getMessage()
+            );
+
             throw e;
 
         } finally {
-            System.out.println("Transfer operation completed.");
+
+            System.out.println(
+                    "Transfer operation completed."
+            );
         }
     }
 
@@ -163,9 +212,12 @@ public abstract class Account implements Transactable, InterestBearing {
 
     @Override
     public String toString() {
-        return "Account Number: " + accountNumber
-                + ", Owner: " + ownerName
-                + ", Balance: " + getBalance();
+        return String.format(
+                "Account Number: %s, Owner: %s, Balance: Rs. %,.2f",
+                accountNumber,
+                ownerName,
+                getBalance()
+        );
     }
 
     @Override

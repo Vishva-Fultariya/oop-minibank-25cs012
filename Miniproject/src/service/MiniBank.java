@@ -5,6 +5,7 @@ import exception.BankException;
 import exception.InsufficientFundsException;
 import exception.InvalidAmountException;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 import model.Account;
 import model.CurrentAccount;
@@ -67,9 +68,10 @@ public class MiniBank {
         };
 
         // Perform deposits and withdrawals
-        System.out.println("\n===== ACCOUNT OPERATIONS =====");
+        System.out.println("\n===== MINI BANK FEATURE DEMONSTRATIONS =====");
 
         demonstrateConcurrency();
+        demonstratePractical10();
         
         System.out.println("\n===== TRANSFER DEMONSTRATION =====");
 
@@ -110,7 +112,7 @@ public class MiniBank {
 
         Account testAccount = new SavingsAccount("Test User", 1000);
 
-        System.out.println("Initial Balance: Rs. " + testAccount.getBalance());
+        System.out.println("Initial Balance: Rs. " + formatMoney(testAccount.getBalance()));
 
         try {
             testAccount.withdraw(5000);
@@ -124,7 +126,7 @@ public class MiniBank {
             System.out.println("Invalid Amount: " + e.getMessage());
 
         } finally {
-            System.out.println("Final Balance: Rs. " + testAccount.getBalance());
+            System.out.println("Final Balance: Rs. " + formatMoney(testAccount.getBalance()));
             System.out.println("Withdrawal test completed.");
         }
 
@@ -158,7 +160,7 @@ public class MiniBank {
 
         } finally {
             System.out.println("Balance after invalid withdrawal: Rs. "
-                    + testAccount.getBalance());
+                    + formatMoney(testAccount.getBalance()));
         }
 
         System.out.println("\n===== INVALID DEPOSIT TEST =====");
@@ -171,7 +173,7 @@ public class MiniBank {
 
         } finally {
             System.out.println("Balance after invalid deposit: Rs. "
-                    + testAccount.getBalance());
+                    + formatMoney(testAccount.getBalance()));
         }
 
         // Demonstrate equals()
@@ -512,7 +514,9 @@ public class MiniBank {
         final int DEPOSIT_COUNT = 1000;
         final long DEPOSIT_AMOUNT = 1;
 
-        System.out.println("\n===== PRACTICAL 09: MULTITHREADING =====");
+        System.out.println("\n================================================");
+        System.out.println("          CONCURRENCY & THREAD SAFETY");
+        System.out.println("================================================");
 
         // -------------------------------------------------
         // 1. Demonstrate an incorrect balance without sync
@@ -532,9 +536,9 @@ public class MiniBank {
 
         System.out.println("Number of threads: " + THREAD_COUNT);
         System.out.println("Deposits per thread: " + DEPOSIT_COUNT);
-        System.out.println("Expected balance: Rs. " + expectedBalance);
+        System.out.println("Expected balance: Rs. " + formatMoney(expectedBalance));
         System.out.println("Actual unsynchronized balance: Rs. "
-                + unsafeBalance);
+                + formatMoney(unsafeBalance));
 
         // -------------------------------------------------
         // 2. Demonstrate synchronized deposits
@@ -582,10 +586,10 @@ public class MiniBank {
         }
 
         System.out.println("\nExpected synchronized balance: Rs. "
-                + expectedBalance);
+                + formatMoney(expectedBalance));
 
         System.out.println("Actual synchronized balance: Rs. "
-                + sharedAccount.getBalance());
+                + formatMoney(sharedAccount.getBalance()));
 
         System.out.println("All deposit threads completed.");
 
@@ -605,7 +609,7 @@ public class MiniBank {
         AtomicInteger successfulWithdrawals = new AtomicInteger(0);
 
         System.out.println("Initial balance: Rs. "
-                + withdrawalAccount.getBalance());
+                + formatMoney(withdrawalAccount.getBalance()));
 
         Thread[] withdrawalThreads
                 = new Thread[WITHDRAWAL_THREADS];
@@ -670,11 +674,280 @@ public class MiniBank {
         System.out.println("Expected successful withdrawals: 5");
 
         System.out.println("Final withdrawal account balance: Rs. "
-                + withdrawalAccount.getBalance());
+                + formatMoney(withdrawalAccount.getBalance()));
 
-        System.out.println("Expected final balance: Rs. 0");
+        System.out.println("Expected final balance: Rs. 0.00");
 
         System.out.println("\n===== CONCURRENCY DEMONSTRATION COMPLETED =====");
+    }
+
+    private static void demonstratePractical10() {
+
+        System.out.println(
+                "\n=============================================="
+        );
+
+        System.out.println(
+                "              ADVANCED CONCURRENCY"
+        );
+
+        System.out.println(
+                "=============================================="
+        );
+
+        // -------------------------------------------------
+        // 1. Thread pool and concurrent bank transactions
+        // -------------------------------------------------
+
+        System.out.println(
+                "\n===== TRANSACTION PROCESSOR: THREAD POOL ====="
+        );
+
+        TransactionProcessor processor =
+                new TransactionProcessor();
+
+        Account transactionAccount =
+                new SavingsAccount("Thread Pool Customer", 10000);
+
+        System.out.println(
+                "Initial balance: Rs. "
+                + formatMoney(transactionAccount.getBalance())
+        );
+
+        System.out.println(
+                "Submitting 8 transactions to a 4-thread pool..."
+        );
+
+        CountDownLatch directTasksCompleted = new CountDownLatch(8);
+
+        for (int i = 1; i <= 8; i++) {
+
+            Runnable transaction;
+
+            if (i % 2 == 0) {
+                transaction = new BankTransaction(
+                        transactionAccount,
+                        200,
+                        BankTransaction.Operation.WITHDRAW
+                );
+            } else {
+                transaction = new BankTransaction(
+                        transactionAccount,
+                        500,
+                        BankTransaction.Operation.DEPOSIT
+                );
+            }
+
+            processor.submit(() -> {
+                try {
+                    transaction.run();
+                } finally {
+                    directTasksCompleted.countDown();
+                }
+            });
+        }
+
+        if (!awaitTasks(directTasksCompleted, "thread-pool transactions")) {
+            processor.stop();
+            return;
+        }
+
+        // -------------------------------------------------
+        // 2. Producer-consumer transaction processing
+        // -------------------------------------------------
+
+        System.out.println(
+                "\n===== PRODUCER-CONSUMER TRANSACTION PROCESSING ====="
+        );
+
+        TransactionBuffer buffer =
+                new TransactionBuffer(3);
+
+        Account bufferedAccount =
+                new SavingsAccount("Buffered Transaction Customer", 10000);
+
+        final int TOTAL_TRANSACTIONS = 8;
+        CountDownLatch bufferedTasksCompleted =
+                new CountDownLatch(TOTAL_TRANSACTIONS);
+
+        // Producer creates and inserts transactions.
+        Thread producer = new Thread(() -> {
+
+            try {
+
+                for (int i = 1; i <= TOTAL_TRANSACTIONS; i++) {
+
+                    Runnable transaction;
+
+                    if (i % 2 == 0) {
+
+                        transaction = new BankTransaction(
+                                bufferedAccount,
+                                200,
+                                BankTransaction.Operation.WITHDRAW
+                        );
+
+                    } else {
+
+                        transaction = new BankTransaction(
+                                bufferedAccount,
+                                500,
+                                BankTransaction.Operation.DEPOSIT
+                        );
+                    }
+
+                    buffer.put(transaction);
+                }
+
+            } catch (InterruptedException e) {
+
+                Thread.currentThread().interrupt();
+
+                System.out.println(
+                        "Producer interrupted."
+                );
+            }
+
+        }, "Transaction-Producer");
+
+        // Consumer removes transactions and submits them
+        // to the four-thread transaction processor.
+        Thread consumer = new Thread(() -> {
+
+            try {
+
+                for (int i = 1; i <= TOTAL_TRANSACTIONS; i++) {
+
+                    Runnable transaction = buffer.take();
+
+                    processor.submit(() -> {
+                        try {
+                            transaction.run();
+                        } finally {
+                            bufferedTasksCompleted.countDown();
+                        }
+                    });
+                }
+
+            } catch (InterruptedException e) {
+
+                Thread.currentThread().interrupt();
+
+                System.out.println(
+                        "Consumer interrupted."
+                );
+            }
+
+        }, "Transaction-Consumer");
+
+        producer.start();
+        consumer.start();
+
+        try {
+
+            producer.join();
+            consumer.join();
+
+        } catch (InterruptedException e) {
+
+            Thread.currentThread().interrupt();
+
+            System.out.println(
+                    "Main thread interrupted while waiting for producer and consumer."
+            );
+
+            processor.stop();
+
+            return;
+        }
+
+        if (!awaitTasks(bufferedTasksCompleted, "buffered transactions")) {
+            processor.stop();
+            return;
+        }
+
+        System.out.println(
+                "Producer completed: " + TOTAL_TRANSACTIONS
+                + " transaction(s) added to the shared buffer."
+        );
+        System.out.println(
+                "Consumer completed: " + TOTAL_TRANSACTIONS
+                + " transaction(s) submitted to the thread pool."
+        );
+
+        // -------------------------------------------------
+        // 3. Long-running transfer warning
+        // -------------------------------------------------
+
+        System.out.println(
+                "\n===== LONG-RUNNING TRANSFER DETECTION ====="
+        );
+
+        Account timedSource =
+                new SavingsAccount("Timed Transfer Sender", 5000);
+
+        Account timedDestination =
+                new SavingsAccount("Timed Transfer Receiver", 1000);
+
+        processor.submit(
+                new TimedTransferTask(
+                        timedSource,
+                        timedDestination,
+                        250
+                )
+        );
+
+        // Wait for all pool transactions and display statistics.
+        processor.stop();
+
+        System.out.println(
+                "\nFinal balance after thread-pool transactions: Rs. "
+                + formatMoney(transactionAccount.getBalance())
+        );
+
+        System.out.println(
+                "Final balance after buffered transactions: Rs. "
+                + formatMoney(bufferedAccount.getBalance())
+        );
+
+        System.out.println(
+                "Timed transfer source balance: Rs. "
+                + formatMoney(timedSource.getBalance())
+        );
+
+        System.out.println(
+                "Timed transfer destination balance: Rs. "
+                + formatMoney(timedDestination.getBalance())
+        );
+
+        // -------------------------------------------------
+        // 4. Deadlock creation and prevention
+        // -------------------------------------------------
+
+        TransferDeadlockDemo.runDemonstration();
+
+        System.out.println(
+                "\n===== ADVANCED CONCURRENCY DEMONSTRATION COMPLETED ====="
+        );
+    }
+
+    private static String formatMoney(double amount) {
+        return String.format("%,.2f", amount);
+    }
+
+    private static boolean awaitTasks(CountDownLatch latch, String taskGroup) {
+
+        try {
+            latch.await();
+            return true;
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.out.println(
+                    "Interrupted while waiting for " + taskGroup + "."
+            );
+            return false;
+        }
     }
 
     private static class BankSession implements AutoCloseable {

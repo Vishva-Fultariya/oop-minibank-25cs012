@@ -8,6 +8,9 @@
 - **Semester:** 3
 - **Programming Language:** Java
 - **JDK Version:** 21
+- **University:** CHARUSAT
+- **Institute:** CSPIT
+- **Department:** Computer Science and Engineering
 
 ## About This Repository
 
@@ -18,11 +21,11 @@ The repository is divided into two parts:
 - **Part A – Practice Programs:** Individual practical programs implementing the concepts covered in each laboratory.
 - **Part B – MiniBank Project:** A semester-long, menu-driven console banking application developed incrementally using Object-Oriented Programming concepts.
 
-Each laboratory adds new Java concepts and practical implementations to the MiniBank application.
+Each laboratory introduces new Java concepts and extends the MiniBank application with additional functionality.
 
 ## Repository Structure
 
-The following structure shows the main source files, supporting files, and project folders. Generated `.class` files are omitted because they are created during compilation.
+The following structure shows the main source files, supporting files, and project folders. Generated `.class` files and build output are omitted because they are created during compilation.
 
 ```text
 oop-minibank-25cs012/
@@ -124,6 +127,14 @@ oop-minibank-25cs012/
 │   └── Practical-3/
 │       └── SharedArraySum.java
 │
+├── lab-10/
+│   ├── Practical-1/
+│   │   └── ThreadPoolRunner.java
+│   ├── Practical-2/
+│   │   └── ProducerConsumer.java
+│   └── Practical-3/
+│       └── DeadlockDemo.java
+│
 ├── Miniproject/
 │   ├── src/
 │   │   ├── exception/
@@ -150,9 +161,14 @@ oop-minibank-25cs012/
 │   │   ├── service/
 │   │   │   ├── AccountWorker.java
 │   │   │   ├── AnnotationValidator.java
+│   │   │   ├── BankTransaction.java
 │   │   │   ├── CommandParser.java
 │   │   │   ├── MiniBank.java
 │   │   │   ├── StatementFormatter.java
+│   │   │   ├── TimedTransferTask.java
+│   │   │   ├── TransactionBuffer.java
+│   │   │   ├── TransactionProcessor.java
+│   │   │   ├── TransferDeadlockDemo.java
 │   │   │   ├── UnsafeDepositDemo.java
 │   │   │   └── WithdrawRule.java
 │   │   │
@@ -163,7 +179,7 @@ oop-minibank-25cs012/
 │   │       ├── TransactionType.java
 │   │       └── Validator.java
 │   │
-│   ├── build/                  # Compiled Java classes
+│   ├── build/                  # Compiled Java classes (generated)
 │   ├── manifest.txt
 │   └── MiniBank.jar
 │
@@ -171,10 +187,14 @@ oop-minibank-25cs012/
 └── README.md
 ```
 
+---
+
 ## Lab 01 – Part A
 
 1. **Vending Machine** – Enum and Switch Expression.
+
 2. **Toll Booth** – Record and Switch Expression.
+
 3. **Rock-Paper-Scissors-Lizard-Spock** – Enum and Random.
 
 ### Lab 01 – Part B
@@ -191,7 +211,9 @@ MiniBank initial implementation:
 ## Lab 02 – Part A
 
 1. **Smart Thermostat** – Constructors, static members and encapsulation.
+
 2. **Cinema Show** – Constructor overloading, static variables and seat booking.
+
 3. **Parking Lot** – Object-oriented parking management and static revenue.
 
 ### Lab 02 – Part B
@@ -209,7 +231,9 @@ MiniBank enhancements:
 ## Lab 03 – Part A
 
 1. **Distinct Points** – Overriding `equals()` and `hashCode()` to identify distinct Point objects.
+
 2. **Duplicate Card Check** – Comparing Card objects using `equals()` and `hashCode()`.
+
 3. **Fraction** – Fraction reduction using GCD and equality comparison.
 
 ### Lab 03 – Part B
@@ -252,12 +276,12 @@ MiniBank enhancements:
 
 MiniBank enhancements:
 
-- **Validator class:** Validates mobile numbers, email addresses, PAN numbers and IFSC codes using compiled regular expressions.
-- **TransactionType enum:** Defines DEPOSIT, WITHDRAW and TRANSFER transaction types.
-- **Command record:** Stores transaction type, account number and transaction amount.
-- **CommandParser class:** Parses transaction commands and converts them into Command records.
-- **StatementFormatter class:** Generates formatted account statements using StringBuilder.
-- **MiniBank integration:** Demonstrates validation, command parsing and account statement generation.
+- Created the `Validator` class to validate mobile numbers, email addresses, PAN numbers and IFSC codes.
+- Created the `TransactionType` enum to define DEPOSIT, WITHDRAW and TRANSFER transaction types.
+- Created the `Command` record to store transaction type, account number and transaction amount.
+- Implemented the `CommandParser` class to parse transaction commands and convert them into Command records.
+- Implemented the `StatementFormatter` class to generate formatted account statements.
+- Integrated validation, command parsing and account statement generation into MiniBank.
 
 ## Lab 05 – Part A
 
@@ -341,7 +365,7 @@ MiniBank enhancements:
   - `service` – Main application, command parsing, statement formatting and withdrawal rules.
 - Demonstrated static imports for Validator methods.
 - Created a manifest specifying the main class.
-- Built and successfully executed the runnable `MiniBank.jar`.
+- Built and executed the runnable `MiniBank.jar`.
 
 ## Lab 07 – Part A
 
@@ -471,7 +495,7 @@ MiniBank enhancements:
 - Used `join()` to wait for worker threads to finish execution.
 - Demonstrated a lost-update race condition using a controlled unsynchronized deposit simulation.
 - Used `CyclicBarrier` to coordinate concurrent operations in the race-condition demonstration.
-- Tested concurrent withdrawals to verify that the account balance never becomes negative or allows excess withdrawals.
+- Tested concurrent withdrawals to verify that the account balance does not become negative or allow excess withdrawals.
 - Used `AtomicInteger` to count successful concurrent withdrawals.
 - Displayed thread names, execution lifecycle and final account balances.
 
@@ -486,6 +510,74 @@ MiniBank enhancements:
 - `Miniproject/src/service/MiniBank.java`
 
 **Key concepts:** Multithreading, `Runnable`, synchronization, race conditions, thread safety, `join()`, `CyclicBarrier` and `AtomicInteger`.
+
+## Lab 10 – Part A
+
+**CO4: Advanced Concurrency – Thread Pools, Producer-Consumer and Deadlock Prevention**
+
+1. **Thread Pool Runner** – ExecutorService and fixed thread pools.
+
+   - Created a fixed thread pool containing 3 worker threads.
+   - Submitted 10 independent Runnable tasks using the executor.
+   - Displayed task IDs and the names of executing worker threads.
+   - Used a short delay to observe thread reuse.
+   - Called `shutdown()` to stop accepting new tasks.
+   - Used `awaitTermination()` to wait for submitted tasks to finish.
+
+2. **Producer-Consumer** – Shared buffer and thread coordination.
+
+   - Created a shared buffer with a limited capacity of 3.
+   - Implemented producer and consumer threads.
+   - Used synchronized methods to protect shared buffer operations.
+   - Used `wait()` when the buffer was full or empty.
+   - Used `notifyAll()` to wake waiting threads after buffer operations.
+   - Produced and consumed 10 items in order.
+   - Used `join()` to wait for both threads to complete.
+
+3. **Deadlock Demonstration** – Deadlock creation and prevention.
+
+   - Created two shared lock objects.
+   - Used two threads to acquire the locks in opposite orders.
+   - Used `CountDownLatch` to coordinate the threads and reliably demonstrate deadlock.
+   - Used daemon threads so the intentional deadlock does not prevent JVM termination.
+   - Demonstrated prevention through a consistent lock acquisition order.
+
+### Lab 10 – Part B
+
+MiniBank enhancements:
+
+- Created the `TransactionProcessor` class using `Executors.newFixedThreadPool(4)`.
+- Implemented transaction submission using `submit(Runnable task)` and `ExecutorService.execute()`.
+- Implemented graceful shutdown using `shutdown()` and `awaitTermination()`.
+- Created the `BankTransaction` class implementing `Runnable` for deposit and withdrawal operations.
+- Submitted multiple banking transactions to the thread pool.
+- Tracked and displayed the number of tasks executed by each worker thread.
+- Implemented the `TransactionBuffer` class using a shared array-based circular buffer.
+- Used synchronized `put()` and `take()` methods for producer-consumer coordination.
+- Used `wait()` and `notifyAll()` to coordinate the producer and consumer threads.
+- Created producer and consumer threads to process banking transactions through the shared buffer.
+- Implemented a deadlock demonstration using two accounts and opposite-direction transfers.
+- Demonstrated deadlock prevention by acquiring account locks in a consistent account-number order.
+- Created the `TimedTransferTask` class to measure transfer execution time.
+- Displayed a warning when a transfer exceeds the configured execution-time threshold.
+- Integrated thread-pool processing, producer-consumer processing and deadlock demonstrations into MiniBank.
+
+**New source files:**
+
+- `Miniproject/src/service/BankTransaction.java`
+- `Miniproject/src/service/TransactionBuffer.java`
+- `Miniproject/src/service/TransactionProcessor.java`
+- `Miniproject/src/service/TimedTransferTask.java`
+- `Miniproject/src/service/TransferDeadlockDemo.java`
+
+**Modified source files:**
+
+- `Miniproject/src/model/Account.java`
+- `Miniproject/src/service/MiniBank.java`
+
+**Key concepts:** `ExecutorService`, fixed thread pools, `Runnable`, task submission, graceful shutdown, `awaitTermination()`, producer-consumer pattern, synchronized shared buffers, `wait()`, `notifyAll()`, deadlock, consistent lock ordering and execution-time monitoring.
+
+---
 
 ## Requirements
 
@@ -757,11 +849,40 @@ java SharedArraySum
 Pop-Location
 ```
 
+### Lab 10 – Part A
+
+**Practical 1 – Thread Pool Runner**
+
+```powershell
+Push-Location .\lab-10\Practical-1
+javac ThreadPoolRunner.java
+java ThreadPoolRunner
+Pop-Location
+```
+
+**Practical 2 – Producer-Consumer**
+
+```powershell
+Push-Location .\lab-10\Practical-2
+javac ProducerConsumer.java
+java ProducerConsumer
+Pop-Location
+```
+
+**Practical 3 – Deadlock Demonstration**
+
+```powershell
+Push-Location .\lab-10\Practical-3
+javac DeadlockDemo.java
+java DeadlockDemo
+Pop-Location
+```
+
 ### MiniBank – Part B
 
 **Compile the complete MiniBank project from source**
 
-Run this command from the repository root:
+Run these commands from the repository root:
 
 ```powershell
 New-Item -ItemType Directory -Force .\Miniproject\build | Out-Null
@@ -780,13 +901,27 @@ This compiles all Java source files, including the exception, model, service, ut
 java -cp .\Miniproject\build service.MiniBank
 ```
 
-**Run the prebuilt runnable JAR**
+**Create or update the runnable MiniBank JAR**
+
+Run from the repository root after compiling the source:
+
+```powershell
+Push-Location .\Miniproject
+
+jar cfm MiniBank.jar manifest.txt -C build .
+
+Pop-Location
+```
+
+**Run the runnable MiniBank JAR**
 
 ```powershell
 java -jar .\Miniproject\MiniBank.jar
 ```
 
-The source compilation and execution commands are the recommended method for testing the latest MiniBank implementation. The prebuilt JAR should be updated separately whenever the source project changes.
+The source compilation and execution commands are the recommended method for testing the latest MiniBank implementation. Rebuild the JAR whenever the source code changes.
+
+---
 
 ## Git Tags
 
@@ -801,10 +936,12 @@ The following Git tags mark the completion of each laboratory:
 - `lab-07` – Lab 07 completed.
 - `lab-08` – Lab 08 completed.
 - `lab-09` – Lab 09 completed.
+- `lab-10` – Lab 10 completed.
 
 ## Author
 
 **Vishva Fultariya**
 
 B.Tech – Computer Science and Engineering  
-CHARUSAT
+CSPIT, CHARUSAT  
+Academic Year 2026–27
