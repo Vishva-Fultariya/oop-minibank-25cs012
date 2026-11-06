@@ -1,24 +1,37 @@
-
 package service;
 
+import exception.AccountNotFoundException;
+import exception.BankException;
+import exception.InsufficientFundsException;
+import exception.InvalidAmountException;
 import java.util.Scanner;
-
 import model.Account;
-import model.Customer;
-import model.SavingsAccount;
 import model.CurrentAccount;
+import model.Customer;
 import model.FixedDepositAccount;
 import model.InterestBearing;
 import model.Premium;
-
+import model.SavingsAccount;
 import util.BankInfo;
-import util.MenuOption;
 import util.Command;
-import util.TransactionType;
-
+import util.MenuOption;
 import static util.Validator.*;
 
 public class MiniBank {
+
+    private static Account findAccount(Account[] accounts, String accountNumber)
+            throws AccountNotFoundException {
+
+        for (Account account : accounts) {
+            if (account.getAccountNumber().equals(accountNumber)) {
+                return account;
+            }
+        }
+
+        throw new AccountNotFoundException(
+                "Account not found: " + accountNumber
+        );
+    }
 
     public static void main(String[] args) {
 
@@ -55,22 +68,107 @@ public class MiniBank {
         // Perform deposits and withdrawals
         System.out.println("\n===== ACCOUNT OPERATIONS =====");
 
-        accounts[0].deposit(2000);
+        System.out.println("\n===== TRANSFER DEMONSTRATION =====");
 
-        System.out.println("Withdrawal: "
-                + accounts[0].withdraw(3000));
+        try {
 
-        System.out.println("Withdrawal: "
-                + accounts[0].withdraw(10000));
+            // Successful transfer
+            accounts[0].transfer(accounts[1], 1000);
 
-        accounts[1].deposit(500);
-        accounts[2].deposit(1000);
+            System.out.println("\nBalances after transfer:");
 
-        // Demonstrate toString()
-        System.out.println("\n===== ACCOUNT DETAILS (toString) =====");
+            System.out.println(accounts[0]);
+            System.out.println(accounts[1]);
 
-        for (Account account : accounts) {
-            System.out.println(account);
+        } catch (BankException e) {
+
+            System.out.println("Bank Error: " + e.getMessage());
+
+            if (e instanceof InsufficientFundsException insufficient) {
+                System.out.println(
+                        "Shortfall: Rs. " + insufficient.getShortfall()
+                );
+            }
+        }
+
+        System.out.println("\n===== ACCOUNT NOT FOUND TEST =====");
+
+        try {
+            Account foundAccount = findAccount(accounts, "AC0001");
+            System.out.println("Account found: " + foundAccount.getAccountNumber());
+
+            findAccount(accounts, "AC9999");
+
+        } catch (AccountNotFoundException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        System.out.println("\n===== INSUFFICIENT FUNDS TEST =====");
+
+        Account testAccount = new SavingsAccount("Test User", 1000);
+
+        System.out.println("Initial Balance: Rs. " + testAccount.getBalance());
+
+        try {
+            testAccount.withdraw(5000);
+            System.out.println("Withdrawal successful.");
+
+        } catch (InsufficientFundsException e) {
+            System.out.println("Exception: " + e.getMessage());
+            System.out.println("Shortfall: Rs. " + e.getShortfall());
+
+        } catch (InvalidAmountException e) {
+            System.out.println("Invalid Amount: " + e.getMessage());
+
+        } finally {
+            System.out.println("Final Balance: Rs. " + testAccount.getBalance());
+            System.out.println("Withdrawal test completed.");
+        }
+
+        System.out.println("\n===== TRY-WITH-RESOURCES TEST =====");
+
+        try (BankSession session = new BankSession()) {
+
+            System.out.println("Performing bank operation...");
+
+            throw new BankException("Simulated bank operation error.");
+
+        } catch (BankException e) {
+
+            System.out.println("Exception handled: " + e.getMessage());
+
+        } finally {
+
+            System.out.println("Bank operation completed.");
+        }
+
+        System.out.println("\n===== INVALID AMOUNT TEST =====");
+
+        try {
+            testAccount.withdraw(0);
+
+        } catch (InvalidAmountException e) {
+            System.out.println("Invalid Amount Exception: " + e.getMessage());
+
+        } catch (InsufficientFundsException e) {
+            System.out.println("Insufficient Funds Exception: " + e.getMessage());
+
+        } finally {
+            System.out.println("Balance after invalid withdrawal: Rs. "
+                    + testAccount.getBalance());
+        }
+
+        System.out.println("\n===== INVALID DEPOSIT TEST =====");
+
+        try {
+            testAccount.deposit(0);
+
+        } catch (InvalidAmountException e) {
+            System.out.println("Invalid Amount Exception: " + e.getMessage());
+
+        } finally {
+            System.out.println("Balance after invalid deposit: Rs. "
+                    + testAccount.getBalance());
         }
 
         // Demonstrate equals()
@@ -231,8 +329,8 @@ public class MiniBank {
         // Statement Formatter demonstration
         System.out.println("\n===== ACCOUNT STATEMENT =====");
 
-        String statement =
-                StatementFormatter.buildStatement(accounts[0]);
+        String statement
+                = StatementFormatter.buildStatement(accounts[0]);
 
         System.out.println(statement);
 
@@ -259,8 +357,8 @@ public class MiniBank {
         // WithdrawRule demonstration using lambda
         System.out.println("\n===== WITHDRAW RULE: LAMBDA EXPRESSION =====");
 
-        WithdrawRule lambdaRule = (account, amount) ->
-                account.isActive()
+        WithdrawRule lambdaRule = (account, amount)
+                -> account.isActive()
                 && amount > 0
                 && amount <= account.getBalance();
 
@@ -274,13 +372,13 @@ public class MiniBank {
         System.out.println("\n===== CUSTOM ANNOTATION VALIDATION =====");
 
         // Test 1: Negative balance
-        Account invalidAccount =
-                new SavingsAccount("Test User", -100);
+        Account invalidAccount
+                = new SavingsAccount("Test User", -100);
 
         System.out.println("\nTest 1: Negative Balance");
 
-        String[] invalidErrors =
-                AnnotationValidator.validate(invalidAccount);
+        String[] invalidErrors
+                = AnnotationValidator.validate(invalidAccount);
 
         if (invalidErrors.length == 0) {
             System.out.println("Account is valid.");
@@ -291,13 +389,13 @@ public class MiniBank {
         }
 
         // Test 2: Valid account
-        Account validAccount =
-                new SavingsAccount("Vishva", 5000);
+        Account validAccount
+                = new SavingsAccount("Vishva", 5000);
 
         System.out.println("\nTest 2: Valid Account");
 
-        String[] validErrors =
-                AnnotationValidator.validate(validAccount);
+        String[] validErrors
+                = AnnotationValidator.validate(validAccount);
 
         if (validErrors.length == 0) {
             System.out.println("Account is valid.");
@@ -308,13 +406,13 @@ public class MiniBank {
         }
 
         // Test 3: Maximum length validation
-        Account longNameAccount =
-                new SavingsAccount("VeryLongStudentName", 5000);
+        Account longNameAccount
+                = new SavingsAccount("VeryLongStudentName", 5000);
 
         System.out.println("\nTest 3: Maximum Length Validation");
 
-        String[] lengthErrors =
-                AnnotationValidator.validate(longNameAccount);
+        String[] lengthErrors
+                = AnnotationValidator.validate(longNameAccount);
 
         if (lengthErrors.length == 0) {
             System.out.println("Account is valid.");
@@ -351,12 +449,18 @@ public class MiniBank {
 
             MenuOption option = switch (choice) {
 
-                case 1 -> MenuOption.OPEN_ACCOUNT;
-                case 2 -> MenuOption.DEPOSIT;
-                case 3 -> MenuOption.WITHDRAW;
-                case 4 -> MenuOption.TRANSFER;
-                case 5 -> MenuOption.EXIT;
-                default -> null;
+                case 1 ->
+                    MenuOption.OPEN_ACCOUNT;
+                case 2 ->
+                    MenuOption.DEPOSIT;
+                case 3 ->
+                    MenuOption.WITHDRAW;
+                case 4 ->
+                    MenuOption.TRANSFER;
+                case 5 ->
+                    MenuOption.EXIT;
+                default ->
+                    null;
             };
 
             if (option == null) {
@@ -378,18 +482,19 @@ public class MiniBank {
             String message = switch (option) {
 
                 case OPEN_ACCOUNT ->
-                        "Open Account - to be implemented in a later lab";
+                    "Open Account - to be implemented in a later lab";
 
                 case DEPOSIT ->
-                        "Deposit - to be implemented in a later lab";
+                    "Deposit - to be implemented in a later lab";
 
                 case WITHDRAW ->
-                        "Withdraw - to be implemented in a later lab";
+                    "Withdraw - to be implemented in a later lab";
 
                 case TRANSFER ->
-                        "Transfer - to be implemented in a later lab";
+                    "Transfer - to be implemented in a later lab";
 
-                case EXIT -> "Goodbye!";
+                case EXIT ->
+                    "Goodbye!";
             };
 
             System.out.println(message);
@@ -397,4 +502,17 @@ public class MiniBank {
 
         sc.close();
     }
+
+    private static class BankSession implements AutoCloseable {
+
+        public BankSession() {
+            System.out.println("Bank session opened.");
+        }
+
+        @Override
+        public void close() {
+            System.out.println("Bank session closed automatically.");
+        }
+    }
+
 }

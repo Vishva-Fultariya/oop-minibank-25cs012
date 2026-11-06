@@ -108,8 +108,22 @@ oop-minibank-25cs012/
 │       ├── Driver.java
 │       └── StudentRecord.java
 │
+├── lab-08/
+│   ├── Practical-1/
+│   │   └── GuardedCalculator.java
+│   ├── Practical-2/
+│   │   └── StockIssue.java
+│   └── Practical-3/
+│       └── TryWithResourcesDemo.java
+│
 ├── Miniproject/
 │   ├── src/
+│   │   ├── exception/
+│   │   │   ├── AccountNotFoundException.java
+│   │   │   ├── BankException.java
+│   │   │   ├── InsufficientFundsException.java
+│   │   │   └── InvalidAmountException.java
+│   │   │
 │   │   ├── model/
 │   │   │   ├── annotation/
 │   │   │   │   ├── Id.java
@@ -204,10 +218,12 @@ MiniBank enhancements:
 ## Lab 04 – Part A
 
 1. **Password Strength Checker** – Validating password strength using String methods and regular expressions.
+
    - Checks minimum length, uppercase letters, digits and special characters.
    - Classifies passwords as Weak, Medium or Strong.
 
 2. **Chat-Log Filter** – Filtering chat messages using String methods and StringBuilder.
+
    - Reads a search keyword from the user.
    - Splits log entries into time, username and message.
    - Performs case-insensitive keyword searching.
@@ -215,6 +231,7 @@ MiniBank enhancements:
    - Builds a matching report using StringBuilder.
 
 3. **Template Filler** – Replacing placeholders using Regular Expressions.
+
    - Uses `Pattern` and `Matcher` classes.
    - Identifies placeholders in a template.
    - Replaces placeholders with corresponding values.
@@ -235,12 +252,14 @@ MiniBank enhancements:
 ## Lab 05 – Part A
 
 1. **Shape Areas** – Abstract classes, inheritance and polymorphism.
+
    - Implements an abstract `Shape` class.
    - Uses Circle, Rectangle and Triangle subclasses.
    - Demonstrates method overriding and runtime polymorphism.
    - Calculates individual areas, total area and the largest shape.
 
 2. **Employee Payroll** – Abstract classes, constructors, `super` and `instanceof`.
+
    - Implements an abstract `Employee` class.
    - Uses FullTimeEmployee and PartTimeEmployee subclasses.
    - Demonstrates constructor chaining and method overriding.
@@ -248,6 +267,7 @@ MiniBank enhancements:
    - Identifies employee types using `instanceof`.
 
 3. **Media Late Fees** – Inheritance and polymorphism.
+
    - Implements an abstract `Media` class.
    - Uses Book, DVD and Magazine subclasses.
    - Calculates late fees using overridden methods.
@@ -270,6 +290,7 @@ MiniBank enhancements:
 ## Lab 06 – Part A
 
 1. **Remote Control System** – Interfaces, default methods, arrays of interface references, anonymous classes and lambda expressions.
+
    - Defines a `Switchable` interface with `on()`, `off()` and `toggle()`.
    - Implements Fan and Light devices.
    - Demonstrates runtime polymorphism using a `Switchable` array.
@@ -277,6 +298,7 @@ MiniBank enhancements:
    - Demonstrates the permission rule using both an anonymous class and a lambda expression.
 
 2. **Notification Sender System** – Functional interfaces, lambda expressions and marker interfaces.
+
    - Defines a functional `Notifier` interface.
    - Implements Email and SMS notification senders using lambda expressions.
    - Broadcasts messages through an array of notification senders.
@@ -284,6 +306,7 @@ MiniBank enhancements:
    - Demonstrates additional notifications for urgent senders.
 
 3. **Discount Engine** – Functional interfaces, lambda expressions, packages and runnable JAR creation.
+
    - Defines a functional `DiscountRule` interface.
    - Implements discount rules using lambda expressions.
    - Allows the user to select a discount rule at runtime.
@@ -313,18 +336,21 @@ MiniBank enhancements:
 ## Lab 07 – Part A
 
 1. **Signup Form Validator** – Custom annotations and Reflection.
+
    - Created the `@NotBlank` annotation to check whether a String field is blank.
    - Created the `@MaxLength` annotation to specify the maximum permitted String length.
    - Used Reflection to inspect fields and validate annotated values.
    - Displayed validation errors for invalid form data.
 
 2. **Mini Test Runner** – Custom method annotations and Reflection.
+
    - Created the `@Run` method annotation.
    - Used Reflection to discover methods annotated with `@Run`.
    - Invoked the selected test methods dynamically.
    - Counted and displayed the total number of executed tests.
 
 3. **Column Mapper** – Mapping data using annotations and Reflection.
+
    - Created the `@Column` annotation to associate object fields with column names.
    - Used Reflection to map header and data values to object fields.
    - Handled missing columns and displayed warnings.
@@ -346,6 +372,58 @@ MiniBank enhancements:
 - Used Reflection to inspect annotations, access private fields and validate their values.
 - Integrated custom annotation validation into MiniBank.
 - Verified negative-balance validation, valid-account validation and maximum-length validation.
+
+## Lab 08 – Part A
+
+1. **Guarded Calculator** – Custom Exceptions, Input Validation and Exception Handling.
+
+   - Created a custom checked `DivideByZeroException`.
+   - Handled invalid numeric input using input parsing exception handling.
+   - Validated arithmetic operators.
+   - Implemented retry handling until a valid calculation is completed.
+   - Used a `finally` block to display the number of attempts.
+
+2. **Stock Issue** – Checked Exceptions and Exception Handling.
+
+   - Created the custom `OutOfStockException` with shortfall information.
+   - Created the custom `InvalidQuantityException`.
+   - Implemented a `Warehouse` class to manage available stock.
+   - Validated requested quantities before processing stock issues.
+   - Displayed the stock shortfall when the requested quantity exceeds available stock.
+   - Continued processing subsequent requests after handling an exception.
+   - Displayed the remaining warehouse stock.
+
+3. **Try-with-Resources Demo** – AutoCloseable and Resource Management.
+
+   - Created a custom resource class implementing `AutoCloseable`.
+   - Used try-with-resources to manage resource closure automatically.
+   - Demonstrated resource closure even when an exception occurs.
+   - Handled the original exception.
+   - Demonstrated suppressed exceptions when resource closure also fails.
+   - Used a `finally` block to display completion.
+
+### Lab 08 – Part B
+
+MiniBank enhancements:
+
+- Created the `exception` package for custom banking exceptions.
+- Created the checked `BankException` base class extending `Exception`.
+- Implemented `InsufficientFundsException` with a `shortfall` field and getter.
+- Created `AccountNotFoundException` for handling missing accounts.
+- Created `InvalidAmountException` for rejecting non-positive transaction amounts.
+- Updated `Account` to throw custom checked exceptions during deposit and withdrawal operations.
+- Added validation to prevent deposits and withdrawals of zero or negative amounts.
+- Implemented the `transfer(Account to, long amount)` method with exception handling.
+- Added transfer validation for missing, inactive and identical accounts.
+- Implemented rollback handling if the destination deposit fails after the source withdrawal.
+- Used `try-catch-finally` to handle transfer errors and guarantee completion messages.
+- Integrated exception handling into MiniBank account operations.
+- Demonstrated account-not-found exception handling.
+- Demonstrated insufficient-funds handling with shortfall calculation.
+- Verified that an unsuccessful withdrawal does not modify the account balance.
+- Verified that invalid deposits and withdrawals do not modify the account balance.
+- Demonstrated try-with-resources using an `AutoCloseable` bank session.
+- Verified automatic resource closure even when a banking exception occurs.
 
 ## Requirements
 
@@ -565,6 +643,41 @@ java Driver
 Pop-Location
 ```
 
+### Lab 08 – Part A
+
+**Practical 1 – Guarded Calculator**
+
+```powershell
+Push-Location .\lab-08\Practical-1
+
+javac GuardedCalculator.java
+java GuardedCalculator
+
+Pop-Location
+```
+
+**Practical 2 – Stock Issue**
+
+```powershell
+Push-Location .\lab-08\Practical-2
+
+javac StockIssue.java
+java StockIssue
+
+Pop-Location
+```
+
+**Practical 3 – Try-with-Resources Demo**
+
+```powershell
+Push-Location .\lab-08\Practical-3
+
+javac TryWithResourcesDemo.java
+java TryWithResourcesDemo
+
+Pop-Location
+```
+
 ### MiniBank – Part B
 
 **Compile the complete MiniBank project from source**
@@ -580,7 +693,7 @@ $files = Get-ChildItem -Path .\Miniproject\src -Recurse -Filter *.java |
 javac -d .\Miniproject\build $files
 ```
 
-This compiles all Java source files, including the model, service, util and custom annotation packages.
+This compiles all Java source files, including the exception, model, service, util and custom annotation packages.
 
 **Run the compiled MiniBank application**
 
@@ -607,6 +720,7 @@ The following Git tags mark the completion of each laboratory:
 - `lab-05` – Lab 05 completed.
 - `lab-06` – Lab 06 completed.
 - `lab-07` – Lab 07 completed.
+- `lab-08` – Lab 08 completed.
 
 ## Author
 
