@@ -5,6 +5,7 @@ import exception.BankException;
 import exception.InsufficientFundsException;
 import exception.InvalidAmountException;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 import model.Account;
 import model.CurrentAccount;
 import model.Customer;
@@ -68,6 +69,8 @@ public class MiniBank {
         // Perform deposits and withdrawals
         System.out.println("\n===== ACCOUNT OPERATIONS =====");
 
+        demonstrateConcurrency();
+        
         System.out.println("\n===== TRANSFER DEMONSTRATION =====");
 
         try {
@@ -501,6 +504,177 @@ public class MiniBank {
         }
 
         sc.close();
+    }
+
+    private static void demonstrateConcurrency() {
+
+        final int THREAD_COUNT = 10;
+        final int DEPOSIT_COUNT = 1000;
+        final long DEPOSIT_AMOUNT = 1;
+
+        System.out.println("\n===== PRACTICAL 09: MULTITHREADING =====");
+
+        // -------------------------------------------------
+        // 1. Demonstrate an incorrect balance without sync
+        // -------------------------------------------------
+        System.out.println("\n--- UNSYNCHRONIZED DEPOSIT DEMONSTRATION ---");
+
+        UnsafeDepositDemo unsafeDemo = new UnsafeDepositDemo();
+
+        long unsafeBalance = unsafeDemo.demonstrate(
+                THREAD_COUNT,
+                DEPOSIT_COUNT,
+                DEPOSIT_AMOUNT
+        );
+
+        long expectedBalance
+                = (long) THREAD_COUNT * DEPOSIT_COUNT * DEPOSIT_AMOUNT;
+
+        System.out.println("Number of threads: " + THREAD_COUNT);
+        System.out.println("Deposits per thread: " + DEPOSIT_COUNT);
+        System.out.println("Expected balance: Rs. " + expectedBalance);
+        System.out.println("Actual unsynchronized balance: Rs. "
+                + unsafeBalance);
+
+        // -------------------------------------------------
+        // 2. Demonstrate synchronized deposits
+        // -------------------------------------------------
+        System.out.println("\n--- SYNCHRONIZED DEPOSIT DEMONSTRATION ---");
+
+        Account sharedAccount = new SavingsAccount(
+                "Concurrent Customer",
+                0
+        );
+
+        Thread[] depositThreads = new Thread[THREAD_COUNT];
+
+        for (int i = 0; i < THREAD_COUNT; i++) {
+
+            AccountWorker worker = new AccountWorker(
+                    sharedAccount,
+                    DEPOSIT_COUNT,
+                    DEPOSIT_AMOUNT
+            );
+
+            depositThreads[i] = new Thread(
+                    worker,
+                    "Deposit-Thread-" + (i + 1)
+            );
+
+            depositThreads[i].start();
+        }
+
+        // Wait for all deposit threads to finish.
+        for (Thread thread : depositThreads) {
+
+            try {
+                thread.join();
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+
+                System.out.println(
+                        "Main thread interrupted while waiting for deposits."
+                );
+
+                return;
+            }
+        }
+
+        System.out.println("\nExpected synchronized balance: Rs. "
+                + expectedBalance);
+
+        System.out.println("Actual synchronized balance: Rs. "
+                + sharedAccount.getBalance());
+
+        System.out.println("All deposit threads completed.");
+
+        // -------------------------------------------------
+        // 3. Demonstrate concurrent withdrawals
+        // -------------------------------------------------
+        System.out.println("\n--- CONCURRENT WITHDRAWAL DEMONSTRATION ---");
+
+        final int WITHDRAWAL_THREADS = 10;
+        final long WITHDRAWAL_AMOUNT = 1000;
+
+        Account withdrawalAccount = new SavingsAccount(
+                "Withdrawal Customer",
+                5000
+        );
+
+        AtomicInteger successfulWithdrawals = new AtomicInteger(0);
+
+        System.out.println("Initial balance: Rs. "
+                + withdrawalAccount.getBalance());
+
+        Thread[] withdrawalThreads
+                = new Thread[WITHDRAWAL_THREADS];
+
+        for (int i = 0; i < WITHDRAWAL_THREADS; i++) {
+
+            withdrawalThreads[i] = new Thread(() -> {
+
+                String threadName = Thread.currentThread().getName();
+
+                try {
+                    boolean success
+                            = withdrawalAccount.withdraw(WITHDRAWAL_AMOUNT);
+
+                    if (success) {
+                        successfulWithdrawals.incrementAndGet();
+
+                        System.out.println(
+                                threadName + ": Withdrawal successful."
+                        );
+                    }
+
+                } catch (InsufficientFundsException e) {
+
+                    System.out.println(
+                            threadName + ": Withdrawal rejected - "
+                            + e.getMessage()
+                    );
+
+                } catch (InvalidAmountException e) {
+
+                    System.out.println(
+                            threadName + ": Invalid amount - "
+                            + e.getMessage()
+                    );
+                }
+
+            }, "Withdraw-Thread-" + (i + 1));
+
+            withdrawalThreads[i].start();
+        }
+
+        for (Thread thread : withdrawalThreads) {
+
+            try {
+                thread.join();
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+
+                System.out.println(
+                        "Main thread interrupted while waiting for withdrawals."
+                );
+
+                return;
+            }
+        }
+
+        System.out.println("\nSuccessful withdrawals: "
+                + successfulWithdrawals.get());
+
+        System.out.println("Expected successful withdrawals: 5");
+
+        System.out.println("Final withdrawal account balance: Rs. "
+                + withdrawalAccount.getBalance());
+
+        System.out.println("Expected final balance: Rs. 0");
+
+        System.out.println("\n===== CONCURRENCY DEMONSTRATION COMPLETED =====");
     }
 
     private static class BankSession implements AutoCloseable {

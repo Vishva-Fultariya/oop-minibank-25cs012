@@ -1,4 +1,3 @@
-
 package model;
 
 import exception.AccountNotFoundException;
@@ -9,7 +8,6 @@ import java.util.Objects;
 import model.annotation.Id;
 import model.annotation.MaxLength;
 import model.annotation.Positive;
-
 
 public abstract class Account implements Transactable, InterestBearing {
 
@@ -27,7 +25,6 @@ public abstract class Account implements Transactable, InterestBearing {
     private static int accountCounter = 1;
 
     protected Account(String ownerName, long openingBalance) {
-
         this.accountNumber =
                 String.format("AC%04d", accountCounter++);
 
@@ -42,8 +39,13 @@ public abstract class Account implements Transactable, InterestBearing {
 
     public abstract double calculateInterest();
 
+    /*
+     * synchronized ensures that only one thread can update
+     * this account's balance through deposit() at a time.
+     */
     @Override
-    public void deposit(long amount) throws InvalidAmountException {
+    public synchronized void deposit(long amount)
+            throws InvalidAmountException {
 
         if (amount <= 0) {
             throw new InvalidAmountException(
@@ -52,12 +54,14 @@ public abstract class Account implements Transactable, InterestBearing {
         }
 
         balance += amount;
-
-        System.out.println("Deposit successful: " + amount);
     }
 
+    /*
+     * synchronized protects the balance check and deduction
+     * as one indivisible operation.
+     */
     @Override
-    public boolean withdraw(long amount)
+    public synchronized boolean withdraw(long amount)
             throws InsufficientFundsException, InvalidAmountException {
 
         if (amount <= 0) {
@@ -71,7 +75,6 @@ public abstract class Account implements Transactable, InterestBearing {
         }
 
         if (amount > balance) {
-
             long shortfall = amount - balance;
 
             throw new InsufficientFundsException(
@@ -89,13 +92,13 @@ public abstract class Account implements Transactable, InterestBearing {
         try {
             if (to == null) {
                 throw new AccountNotFoundException(
-                    "Destination account not found."
+                        "Destination account not found."
                 );
             }
 
             if (this == to || this.equals(to)) {
                 throw new BankException(
-                    "Cannot transfer money to the same account."
+                        "Cannot transfer money to the same account."
                 );
             }
 
@@ -145,8 +148,12 @@ public abstract class Account implements Transactable, InterestBearing {
         return ownerName;
     }
 
+    /*
+     * synchronized ensures that a thread reading the balance
+     * sees a properly synchronized value.
+     */
     @Override
-    public double getBalance() {
+    public synchronized double getBalance() {
         return balance;
     }
 
@@ -156,14 +163,13 @@ public abstract class Account implements Transactable, InterestBearing {
 
     @Override
     public String toString() {
-        return "Account Number: " + accountNumber +
-                ", Owner: " + ownerName +
-                ", Balance: " + balance;
+        return "Account Number: " + accountNumber
+                + ", Owner: " + ownerName
+                + ", Balance: " + getBalance();
     }
 
     @Override
     public boolean equals(Object obj) {
-
         if (this == obj) {
             return true;
         }

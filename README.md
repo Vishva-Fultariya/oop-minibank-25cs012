@@ -116,6 +116,14 @@ oop-minibank-25cs012/
 │   └── Practical-3/
 │       └── TryWithResourcesDemo.java
 │
+├── lab-09/
+│   ├── Practical-1/
+│   │   └── CounterRace.java
+│   ├── Practical-2/
+│   │   └── SeatBookingRace.java
+│   └── Practical-3/
+│       └── SharedArraySum.java
+│
 ├── Miniproject/
 │   ├── src/
 │   │   ├── exception/
@@ -140,10 +148,12 @@ oop-minibank-25cs012/
 │   │   │   └── Transactable.java
 │   │   │
 │   │   ├── service/
+│   │   │   ├── AccountWorker.java
 │   │   │   ├── AnnotationValidator.java
 │   │   │   ├── CommandParser.java
 │   │   │   ├── MiniBank.java
 │   │   │   ├── StatementFormatter.java
+│   │   │   ├── UnsafeDepositDemo.java
 │   │   │   └── WithdrawRule.java
 │   │   │
 │   │   └── util/
@@ -425,6 +435,58 @@ MiniBank enhancements:
 - Demonstrated try-with-resources using an `AutoCloseable` bank session.
 - Verified automatic resource closure even when a banking exception occurs.
 
+## Lab 09 – Part A
+
+**CO4: Multithreading and Synchronization**
+
+1. **Counter Race Condition** – Shared variables, concurrent execution and synchronization.
+
+   - Implemented a shared counter accessed by multiple threads.
+   - Demonstrated a race condition using unsynchronized increments.
+   - Used synchronization to ensure accurate and consistent counter results.
+   - Compared the expected counter value with the actual results.
+
+2. **Seat Booking Race Condition** – Thread safety and synchronized methods.
+
+   - Simulated concurrent seat booking with 10 threads competing for 5 available seats.
+   - Demonstrated incorrect booking results caused by concurrent access.
+   - Implemented synchronized booking to prevent overselling.
+   - Verified that exactly 5 bookings succeed when synchronization is used.
+
+3. **Shared Array Sum** – Concurrent data processing and thread-safe accumulation.
+
+   - Divided a large array among multiple threads to calculate a shared sum.
+   - Demonstrated incorrect results caused by unsynchronized updates to a shared variable.
+   - Implemented synchronized accumulation to obtain the correct sum.
+   - Used `AtomicLong` as an alternative thread-safe solution.
+   - Compared the execution times of different approaches.
+
+### Lab 09 – Part B
+
+MiniBank enhancements:
+
+- Implemented `AccountWorker` using the `Runnable` interface to perform repeated deposits concurrently.
+- Updated account deposit, withdrawal and balance operations to use synchronization.
+- Used multiple threads to perform concurrent deposits on a shared bank account.
+- Used `join()` to wait for worker threads to finish execution.
+- Demonstrated a lost-update race condition using a controlled unsynchronized deposit simulation.
+- Used `CyclicBarrier` to coordinate concurrent operations in the race-condition demonstration.
+- Tested concurrent withdrawals to verify that the account balance never becomes negative or allows excess withdrawals.
+- Used `AtomicInteger` to count successful concurrent withdrawals.
+- Displayed thread names, execution lifecycle and final account balances.
+
+**New source files:**
+
+- `Miniproject/src/service/AccountWorker.java`
+- `Miniproject/src/service/UnsafeDepositDemo.java`
+
+**Modified source files:**
+
+- `Miniproject/src/model/Account.java`
+- `Miniproject/src/service/MiniBank.java`
+
+**Key concepts:** Multithreading, `Runnable`, synchronization, race conditions, thread safety, `join()`, `CyclicBarrier` and `AtomicInteger`.
+
 ## Requirements
 
 - Java Development Kit (JDK) 21.
@@ -614,10 +676,8 @@ Pop-Location
 
 ```powershell
 Push-Location .\lab-07\Practical-1
-
 javac *.java
 java Driver
-
 Pop-Location
 ```
 
@@ -625,10 +685,8 @@ Pop-Location
 
 ```powershell
 Push-Location .\lab-07\Practical-2
-
 javac *.java
 java Driver
-
 Pop-Location
 ```
 
@@ -636,10 +694,8 @@ Pop-Location
 
 ```powershell
 Push-Location .\lab-07\Practical-3
-
 javac *.java
 java Driver
-
 Pop-Location
 ```
 
@@ -649,10 +705,8 @@ Pop-Location
 
 ```powershell
 Push-Location .\lab-08\Practical-1
-
 javac GuardedCalculator.java
 java GuardedCalculator
-
 Pop-Location
 ```
 
@@ -660,10 +714,8 @@ Pop-Location
 
 ```powershell
 Push-Location .\lab-08\Practical-2
-
 javac StockIssue.java
 java StockIssue
-
 Pop-Location
 ```
 
@@ -671,10 +723,37 @@ Pop-Location
 
 ```powershell
 Push-Location .\lab-08\Practical-3
-
 javac TryWithResourcesDemo.java
 java TryWithResourcesDemo
+Pop-Location
+```
 
+### Lab 09 – Part A
+
+**Practical 1 – Counter Race**
+
+```powershell
+Push-Location .\lab-09\Practical-1
+javac *.java
+java CounterRace
+Pop-Location
+```
+
+**Practical 2 – Seat Booking Race**
+
+```powershell
+Push-Location .\lab-09\Practical-2
+javac *.java
+java SeatBookingRace
+Pop-Location
+```
+
+**Practical 3 – Shared Array Sum**
+
+```powershell
+Push-Location .\lab-09\Practical-3
+javac *.java
+java SharedArraySum
 Pop-Location
 ```
 
@@ -707,7 +786,7 @@ java -cp .\Miniproject\build service.MiniBank
 java -jar .\Miniproject\MiniBank.jar
 ```
 
-The source compilation and execution commands are the recommended method for testing the latest MiniBank implementation.
+The source compilation and execution commands are the recommended method for testing the latest MiniBank implementation. The prebuilt JAR should be updated separately whenever the source project changes.
 
 ## Git Tags
 
@@ -721,6 +800,7 @@ The following Git tags mark the completion of each laboratory:
 - `lab-06` – Lab 06 completed.
 - `lab-07` – Lab 07 completed.
 - `lab-08` – Lab 08 completed.
+- `lab-09` – Lab 09 completed.
 
 ## Author
 
