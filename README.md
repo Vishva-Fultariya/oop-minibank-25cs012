@@ -26,27 +26,22 @@ Each laboratory introduces new Java concepts and extends the MiniBank applicatio
 
 ## Repository Structure
 
-The following structure shows the main source files, supporting files, and project folders. Generated `.class` files, temporary data files and build output are excluded because they are created during compilation or program execution.
+The following structure shows the main source files, supporting files and project folders. Generated `.class` files, temporary data files and build output are excluded because they are created during compilation or program execution.
 
 ```text
 oop-minibank-25cs012/
 │
 ├── lab-01/
-│   ├── Practical-1/
-│   │   └── VendingMachine.java
+│   ├── Practical-1/VendingMachine.java
 │   ├── Practical-2/
 │   │   ├── TollBooth.java
 │   │   └── Vehicle.java
-│   └── Practical-3/
-│       └── RPSLS.java
+│   └── Practical-3/RPSLS.java
 │
 ├── lab-02/
-│   ├── Practical-1/
-│   │   └── Thermostat.java
-│   ├── Practical-2/
-│   │   └── CinemaShow.java
-│   └── Practical-3/
-│       └── ParkingLot.java
+│   ├── Practical-1/Thermostat.java
+│   ├── Practical-2/CinemaShow.java
+│   └── Practical-3/ParkingLot.java
 │
 ├── lab-03/
 │   ├── Practical-1/
@@ -71,24 +66,17 @@ oop-minibank-25cs012/
 │       └── TemplateFiller.java
 │
 ├── lab-05/
-│   ├── Practical-1/
-│   │   └── ShapeAreas.java
-│   ├── Practical-2/
-│   │   └── Payroll.java
-│   └── Practical-3/
-│       └── MediaLateFees.java
+│   ├── Practical-1/ShapeAreas.java
+│   ├── Practical-2/Payroll.java
+│   └── Practical-3/MediaLateFees.java
 │
 ├── lab-06/
-│   ├── Practical-1/
-│   │   └── RemoteControl.java
-│   ├── Practical-2/
-│   │   └── NotificationSenders.java
+│   ├── Practical-1/RemoteControl.java
+│   ├── Practical-2/NotificationSenders.java
 │   └── Practical-3/
 │       ├── src/
-│       │   ├── app/
-│       │   │   └── DiscountEngine.java
-│       │   └── discount/
-│       │       └── DiscountRule.java
+│       │   ├── app/DiscountEngine.java
+│       │   └── discount/DiscountRule.java
 │       ├── manifest.txt
 │       └── DiscountEngine.jar
 │
@@ -111,28 +99,19 @@ oop-minibank-25cs012/
 │       └── StudentRecord.java
 │
 ├── lab-08/
-│   ├── Practical-1/
-│   │   └── GuardedCalculator.java
-│   ├── Practical-2/
-│   │   └── StockIssue.java
-│   └── Practical-3/
-│       └── TryWithResourcesDemo.java
+│   ├── Practical-1/GuardedCalculator.java
+│   ├── Practical-2/StockIssue.java
+│   └── Practical-3/TryWithResourcesDemo.java
 │
 ├── lab-09/
-│   ├── Practical-1/
-│   │   └── CounterRace.java
-│   ├── Practical-2/
-│   │   └── SeatBookingRace.java
-│   └── Practical-3/
-│       └── SharedArraySum.java
+│   ├── Practical-1/CounterRace.java
+│   ├── Practical-2/SeatBookingRace.java
+│   └── Practical-3/SharedArraySum.java
 │
 ├── lab-10/
-│   ├── Practical-1/
-│   │   └── ThreadPoolRunner.java
-│   ├── Practical-2/
-│   │   └── ProducerConsumer.java
-│   └── Practical-3/
-│       └── DeadlockDemo.java
+│   ├── Practical-1/ThreadPoolRunner.java
+│   ├── Practical-2/ProducerConsumer.java
+│   └── Practical-3/DeadlockDemo.java
 │
 ├── lab-11/
 │   ├── Practical-1/
@@ -144,6 +123,11 @@ oop-minibank-25cs012/
 │   └── Practical-3/
 │       ├── Driver.java
 │       └── FolderTreeReport.java
+│
+├── lab-12/
+│   ├── Practical-1/WordFrequency.java
+│   ├── Practical-2/UniqueVisitors.java
+│   └── Practical-3/Leaderboard.java
 │
 ├── Miniproject/
 │   ├── src/
@@ -168,6 +152,8 @@ oop-minibank-25cs012/
 │   │   │   └── Transactable.java
 │   │   │
 │   │   ├── service/
+│   │   │   ├── AccountStore.java
+│   │   │   ├── AccountStoreDemo.java
 │   │   │   ├── AccountWorker.java
 │   │   │   ├── AnnotationValidator.java
 │   │   │   ├── BankTransaction.java
@@ -675,6 +661,84 @@ These files are generated when MiniBank runs and are excluded from version contr
 
 **Key concepts:** `Serializable`, `serialVersionUID`, `transient`, `ObjectOutputStream`, `ObjectInputStream`, serialization, deserialization, try-with-resources, `Path`, `Files`, `Files.write()`, `StandardOpenOption.CREATE`, `StandardOpenOption.APPEND`, `DirectoryStream`, `BufferedReader`, `BasicFileAttributes`, file metadata and Java NIO.
 
+## Lab 12 – Part A
+
+**CO6: Java Collections Framework – List, Set, Map and Sorting**
+
+1. **Word Frequency** – HashMap, Comparator and sorting.
+
+   - Split a paragraph into individual words.
+   - Used `HashMap` to count the frequency of each word.
+   - Converted map entries into a list for sorting.
+   - Used a Comparator to sort words by frequency in descending order.
+   - Applied alphabetical ordering as a tie-breaker.
+
+2. **Unique Visitors** – HashSet and LinkedHashSet.
+
+   - Processed a list of login names containing repeated visitors.
+   - Used `HashSet` to identify unique visitors.
+   - Used `LinkedHashSet` to preserve the first-seen insertion order.
+   - Displayed the total number of unique visitors.
+   - Displayed the first three distinct visitors.
+
+3. **Leaderboard** – Map, Comparator and top-N ranking.
+
+   - Stored player names and scores using a Map.
+   - Sorted players by score in descending order.
+   - Used player names to break ties.
+   - Displayed the top-N players in leaderboard order.
+
+## Lab 12 – Part B
+
+MiniBank enhancements:
+
+- Created the `AccountStore` class to manage bank accounts using `HashMap<String, Account>`.
+- Used account numbers as keys for efficient account lookup.
+- Implemented `add(Account account)` to add accounts to the store.
+- Implemented `get(String accountNumber)` to retrieve an account by its account number.
+- Implemented `getAll()` to return the stored accounts as an `ArrayList`.
+- Maintained transaction history using `ArrayList<String>`.
+- Implemented `sortedByBalance()` to return accounts sorted by balance using a Comparator.
+- Updated the abstract `Account` class to implement `Comparable<Account>`.
+- Implemented `compareTo()` to compare accounts by account number.
+- Updated `TransactionProcessor` to maintain a shared account registry using `ConcurrentHashMap<String, Account>`.
+- Demonstrated thread-safe account registration and lookup.
+- Added supplementary account filtering to retrieve accounts above a specified balance.
+- Used `TreeMap` to display accounts in sorted account-number key order.
+- Created `AccountStoreDemo` to demonstrate the collection operations independently of the main MiniBank menu.
+- Verified account lookup, balance sorting, account-number sorting, transaction history and thread-safe account access.
+
+**New source files:**
+
+- `Miniproject/src/service/AccountStore.java`
+- `Miniproject/src/service/AccountStoreDemo.java`
+
+**Modified source files:**
+
+- `Miniproject/src/model/Account.java`
+- `Miniproject/src/service/TransactionProcessor.java`
+
+**Key concepts:** Java Collections Framework, `List`, `Set`, `Map`, `HashMap`, `ArrayList`, `HashSet`, `LinkedHashSet`, `TreeMap`, `ConcurrentHashMap`, `Comparable`, `Comparator`, sorting and thread-safe collections.
+
+**Expected collection demonstration:**
+
+| Operation | Expected Result |
+|---|---|
+| Account lookup | `AC0002` returns the correct account |
+| Balance sorting | Rs. 9,000, Rs. 5,000, Rs. 2,000 |
+| Comparable sorting | Accounts sorted by account number |
+| Transaction history | Transactions stored in an ArrayList |
+| TreeMap | Account numbers displayed in sorted key order |
+| ConcurrentHashMap | Three accounts registered and retrievable |
+
+**Verified account data:**
+
+| Account Number | Account Holder | Balance |
+|---|---|---:|
+| AC0001 | Vishva | Rs. 5,000 |
+| AC0002 | Dhruvi | Rs. 2,000 |
+| AC0003 | Madhav | Rs. 9,000 |
+
 ---
 
 ## Requirements
@@ -1005,6 +1069,35 @@ java Driver
 Pop-Location
 ```
 
+### Lab 12 – Part A
+
+**Practical 1 – Word Frequency**
+
+```powershell
+Push-Location .\lab-12\Practical-1
+javac WordFrequency.java
+java WordFrequency
+Pop-Location
+```
+
+**Practical 2 – Unique Visitors**
+
+```powershell
+Push-Location .\lab-12\Practical-2
+javac UniqueVisitors.java
+java UniqueVisitors
+Pop-Location
+```
+
+**Practical 3 – Leaderboard**
+
+```powershell
+Push-Location .\lab-12\Practical-3
+javac Leaderboard.java
+java Leaderboard
+Pop-Location
+```
+
 ### MiniBank – Part B
 
 **Compile the complete MiniBank project from source**
@@ -1012,12 +1105,16 @@ Pop-Location
 Run these commands from the repository root:
 
 ```powershell
+if (Test-Path .\Miniproject\build) {
+    Remove-Item .\Miniproject\build -Recurse -Force
+}
+
 New-Item -ItemType Directory -Force .\Miniproject\build | Out-Null
 
 $files = Get-ChildItem -Path .\Miniproject\src -Recurse -Filter *.java |
     ForEach-Object { $_.FullName }
 
-javac -d .\Miniproject\build $files
+javac -encoding UTF-8 -d .\Miniproject\build $files
 ```
 
 This compiles all Java source files, including the exception, model, service, util and custom annotation packages.
@@ -1029,6 +1126,25 @@ java -cp .\Miniproject\build service.MiniBank
 ```
 
 The application demonstrates the MiniBank features, including concurrency, account transfers, serialization, transaction logging and report generation.
+
+**Practical 12 – Account Collections Demonstration**
+
+Run this command after compiling the complete project:
+
+```powershell
+java -cp .\Miniproject\build service.AccountStoreDemo
+```
+
+The demonstration covers:
+
+- Adding accounts to the `HashMap`-based account store.
+- Retrieving an account using its account number.
+- Sorting accounts by balance using a Comparator.
+- Sorting accounts by account number using Comparable.
+- Maintaining transaction history using an ArrayList.
+- Displaying accounts in sorted key order using TreeMap.
+- Filtering accounts above a specified balance.
+- Registering and retrieving accounts using ConcurrentHashMap.
 
 **Practical 11 generated files**
 
@@ -1080,6 +1196,7 @@ The following Git tags mark the completion of each laboratory:
 - `lab-09` – Lab 09 completed.
 - `lab-10` – Lab 10 completed.
 - `lab-11` – Lab 11 completed.
+- `lab-12` – Lab 12 completed.
 
 ## Author
 
@@ -1088,4 +1205,3 @@ The following Git tags mark the completion of each laboratory:
 B.Tech – Computer Science and Engineering  
 CSPIT, CHARUSAT  
 Academic Year 2026–27
-
