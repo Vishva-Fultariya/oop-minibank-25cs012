@@ -1,7 +1,15 @@
-
 # Ignore compiled Java files
 *.class
 
 # Build output
 Miniproject/build/
 Miniproject/out/
+
+# MiniBank generated data
+Miniproject/data/
+
+# Practical 11 Part A generated files
+lab-11/Practical-1/students.dat
+lab-11/Practical-2/logs/
+lab-11/Practical-3/sample-folder/
+lab-11/Practical-3/folder-report.txt

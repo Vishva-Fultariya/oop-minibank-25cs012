@@ -1,6 +1,11 @@
+
 package model;
 
-public class SavingsAccount extends Account {
+import java.io.Serializable;
+
+public class SavingsAccount extends Account implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private static final double INTEREST_RATE = 0.04;
 

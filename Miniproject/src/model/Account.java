@@ -1,15 +1,20 @@
 package model;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import exception.AccountNotFoundException;
 import exception.BankException;
 import exception.InsufficientFundsException;
 import exception.InvalidAmountException;
-import java.util.Objects;
+
 import model.annotation.Id;
 import model.annotation.MaxLength;
 import model.annotation.Positive;
 
-public abstract class Account implements Transactable, InterestBearing {
+public abstract class Account implements Serializable, Transactable, InterestBearing {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     private final String accountNumber;
@@ -25,8 +30,9 @@ public abstract class Account implements Transactable, InterestBearing {
     private static int accountCounter = 1;
 
     protected Account(String ownerName, long openingBalance) {
-        this.accountNumber =
-                String.format("AC%04d", accountCounter++);
+
+        this.accountNumber
+                = String.format("AC%04d", accountCounter++);
 
         this.ownerName = ownerName;
         this.balance = openingBalance;
@@ -105,12 +111,12 @@ public abstract class Account implements Transactable, InterestBearing {
             }
 
             /*
-            * Always acquire account locks in ascending
-            * account-number order.
-            *
-            * This prevents two opposite-direction transfers
-            * from acquiring the same locks in opposite orders.
-            */
+             * Always acquire account locks in ascending
+             * account-number order.
+             *
+             * This prevents two opposite-direction transfers
+             * from acquiring the same locks in opposite orders.
+             */
             Account firstLock;
             Account secondLock;
 
@@ -170,7 +176,10 @@ public abstract class Account implements Transactable, InterestBearing {
             }
 
             System.out.println(
-                    String.format("Transfer successful: Rs. %,.2f", (double) amount)
+                    String.format(
+                            "Transfer successful: Rs. %,.2f",
+                            (double) amount
+                    )
             );
 
         } catch (BankException e) {
@@ -222,6 +231,7 @@ public abstract class Account implements Transactable, InterestBearing {
 
     @Override
     public boolean equals(Object obj) {
+
         if (this == obj) {
             return true;
         }
@@ -238,5 +248,25 @@ public abstract class Account implements Transactable, InterestBearing {
     @Override
     public int hashCode() {
         return Objects.hash(accountNumber);
+    }
+
+    public static void synchronizeAccountCounter(Account[] accounts) {
+
+        int maximumNumber = 0;
+
+        for (Account account : accounts) {
+
+            String accountNumber = account.getAccountNumber();
+
+            int number = Integer.parseInt(
+                    accountNumber.substring(2)
+            );
+
+            if (number > maximumNumber) {
+                maximumNumber = number;
+            }
+        }
+
+        accountCounter = Math.max(accountCounter, maximumNumber + 1);
     }
 }

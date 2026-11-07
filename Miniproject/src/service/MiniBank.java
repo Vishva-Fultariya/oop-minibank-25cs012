@@ -4,6 +4,10 @@ import exception.AccountNotFoundException;
 import exception.BankException;
 import exception.InsufficientFundsException;
 import exception.InvalidAmountException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -95,6 +99,9 @@ public class MiniBank {
                 );
             }
         }
+
+        // Practical 11 Part B: Serialization, transaction logging and reporting.
+        demonstratePractical11(accounts);
 
         System.out.println("\n===== ACCOUNT NOT FOUND TEST =====");
 
@@ -506,6 +513,73 @@ public class MiniBank {
         }
 
         sc.close();
+    }
+
+    private static void demonstratePractical11(Account[] accounts) {
+
+        System.out.println("\n================================================");
+        System.out.println("       PRACTICAL 11: FILE HANDLING & NIO");
+        System.out.println("================================================");
+
+        Path dataFolder = Paths.get("data");
+        Path accountsFile = dataFolder.resolve("accounts.dat");
+        Path logsFolder = dataFolder.resolve("logs");
+        Path transactionFile = logsFolder.resolve("transactions.log");
+        Path reportFile = dataFolder.resolve("bank-report.txt");
+
+        try {
+            // Start with a fresh demonstration log so totals remain
+            // predictable every time the program is executed.
+            Files.deleteIfExists(transactionFile);
+
+            // Perform actual transactions and record each successful operation.
+            accounts[0].deposit(500);
+            TransactionLog.append(
+                    transactionFile,
+                    "DEPOSIT " + accounts[0].getAccountNumber() + " 500"
+            );
+
+            if (accounts[1].withdraw(200)) {
+                TransactionLog.append(
+                        transactionFile,
+                        "WITHDRAW " + accounts[1].getAccountNumber() + " 200"
+                );
+            }
+
+            accounts[2].deposit(1000);
+            TransactionLog.append(
+                    transactionFile,
+                    "DEPOSIT " + accounts[2].getAccountNumber() + " 1000"
+            );
+
+            System.out.println("\n===== ACCOUNT SERIALIZATION =====");
+
+            StatePersister.save(accounts, accountsFile);
+
+            Account[] loadedAccounts = StatePersister.load(accountsFile);
+
+            System.out.println("\n===== RELOADED ACCOUNT DETAILS =====");
+
+            for (Account account : loadedAccounts) {
+                System.out.println(account);
+            }
+
+            System.out.println("\n===== TRANSACTION REPORT =====");
+
+            String generatedReport = ReportGenerator.generateReport(
+                    logsFolder,
+                    reportFile
+            );
+
+            System.out.println(generatedReport);
+            System.out.println("Report saved to: "
+                    + reportFile.toAbsolutePath());
+
+        } catch (IOException | ClassNotFoundException | BankException e) {
+            System.out.println(
+                    "Practical 11 operation failed: " + e.getMessage()
+            );
+        }
     }
 
     private static void demonstrateConcurrency() {

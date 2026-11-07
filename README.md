@@ -1,3 +1,4 @@
+
 # MiniBank – Object Oriented Programming
 
 ## Course Information
@@ -25,7 +26,7 @@ Each laboratory introduces new Java concepts and extends the MiniBank applicatio
 
 ## Repository Structure
 
-The following structure shows the main source files, supporting files, and project folders. Generated `.class` files and build output are omitted because they are created during compilation.
+The following structure shows the main source files, supporting files, and project folders. Generated `.class` files, temporary data files and build output are excluded because they are created during compilation or program execution.
 
 ```text
 oop-minibank-25cs012/
@@ -98,13 +99,11 @@ oop-minibank-25cs012/
 │   │   ├── MaxLength.java
 │   │   ├── NotBlank.java
 │   │   └── SignupForm.java
-│   │
 │   ├── Practical-2/
 │   │   ├── Driver.java
 │   │   ├── MiniTestRunner.java
 │   │   ├── Run.java
 │   │   └── TestCases.java
-│   │
 │   └── Practical-3/
 │       ├── Column.java
 │       ├── ColumnMapper.java
@@ -135,6 +134,17 @@ oop-minibank-25cs012/
 │   └── Practical-3/
 │       └── DeadlockDemo.java
 │
+├── lab-11/
+│   ├── Practical-1/
+│   │   ├── Driver.java
+│   │   └── StudentRecord.java
+│   ├── Practical-2/
+│   │   ├── Driver.java
+│   │   └── LogAnalyzer.java
+│   └── Practical-3/
+│       ├── Driver.java
+│       └── FolderTreeReport.java
+│
 ├── Miniproject/
 │   ├── src/
 │   │   ├── exception/
@@ -148,7 +158,6 @@ oop-minibank-25cs012/
 │   │   │   │   ├── Id.java
 │   │   │   │   ├── MaxLength.java
 │   │   │   │   └── Positive.java
-│   │   │   │
 │   │   │   ├── Account.java
 │   │   │   ├── CurrentAccount.java
 │   │   │   ├── Customer.java
@@ -164,9 +173,12 @@ oop-minibank-25cs012/
 │   │   │   ├── BankTransaction.java
 │   │   │   ├── CommandParser.java
 │   │   │   ├── MiniBank.java
+│   │   │   ├── ReportGenerator.java
+│   │   │   ├── StatePersister.java
 │   │   │   ├── StatementFormatter.java
 │   │   │   ├── TimedTransferTask.java
 │   │   │   ├── TransactionBuffer.java
+│   │   │   ├── TransactionLog.java
 │   │   │   ├── TransactionProcessor.java
 │   │   │   ├── TransferDeadlockDemo.java
 │   │   │   ├── UnsafeDepositDemo.java
@@ -179,7 +191,8 @@ oop-minibank-25cs012/
 │   │       ├── TransactionType.java
 │   │       └── Validator.java
 │   │
-│   ├── build/                  # Compiled Java classes (generated)
+│   ├── build/                  # Generated compiled classes
+│   ├── data/                   # Generated serialization and report files
 │   ├── manifest.txt
 │   └── MiniBank.jar
 │
@@ -192,9 +205,7 @@ oop-minibank-25cs012/
 ## Lab 01 – Part A
 
 1. **Vending Machine** – Enum and Switch Expression.
-
 2. **Toll Booth** – Record and Switch Expression.
-
 3. **Rock-Paper-Scissors-Lizard-Spock** – Enum and Random.
 
 ### Lab 01 – Part B
@@ -211,9 +222,7 @@ MiniBank initial implementation:
 ## Lab 02 – Part A
 
 1. **Smart Thermostat** – Constructors, static members and encapsulation.
-
 2. **Cinema Show** – Constructor overloading, static variables and seat booking.
-
 3. **Parking Lot** – Object-oriented parking management and static revenue.
 
 ### Lab 02 – Part B
@@ -231,9 +240,7 @@ MiniBank enhancements:
 ## Lab 03 – Part A
 
 1. **Distinct Points** – Overriding `equals()` and `hashCode()` to identify distinct Point objects.
-
 2. **Duplicate Card Check** – Comparing Card objects using `equals()` and `hashCode()`.
-
 3. **Fraction** – Fraction reduction using GCD and equality comparison.
 
 ### Lab 03 – Part B
@@ -577,6 +584,97 @@ MiniBank enhancements:
 
 **Key concepts:** `ExecutorService`, fixed thread pools, `Runnable`, task submission, graceful shutdown, `awaitTermination()`, producer-consumer pattern, synchronized shared buffers, `wait()`, `notifyAll()`, deadlock, consistent lock ordering and execution-time monitoring.
 
+## Lab 11 – Part A
+
+**CO5: File Handling, Serialization and Java NIO**
+
+1. **Save and Load Objects** – Object Serialization and Deserialization.
+
+   - Created the `StudentRecord` class implementing `Serializable`.
+   - Declared `serialVersionUID` for serialization version control.
+   - Used the `transient` keyword for the `temporaryNote` field.
+   - Created an array of student records and saved it using `ObjectOutputStream`.
+   - Loaded the saved objects using `ObjectInputStream`.
+   - Verified that student names and roll numbers were restored correctly.
+   - Demonstrated that the transient field is not restored after deserialization.
+
+2. **Log Analyzer** – File Reading and Java NIO.
+
+   - Used `Path` and `Files` to locate and read log files.
+   - Created multiple sample log files for analysis.
+   - Read files line by line using `BufferedReader`.
+   - Counted the total number of lines across all files.
+   - Counted lines containing a specified keyword.
+   - Retrieved and displayed file sizes using file attributes.
+
+3. **Folder Tree Report** – Directory Traversal and File Attributes.
+
+   - Used `Files.walkFileTree()` to traverse a directory tree.
+   - Implemented `SimpleFileVisitor` to visit files.
+   - Retrieved file names, relative paths, file sizes and last-modified timestamps.
+   - Used `BasicFileAttributes` to obtain file metadata.
+   - Generated a folder-tree report using `StringBuilder`.
+   - Wrote the report to a text file using Java NIO.
+
+## Lab 11 – Part B
+
+MiniBank enhancements:
+
+- Updated the abstract `Account` class to implement `Serializable`.
+- Updated `SavingsAccount`, `CurrentAccount` and `FixedDepositAccount` to explicitly implement `Serializable`.
+- Declared `private static final long serialVersionUID` in the account classes.
+- Updated `Customer` to implement `Serializable`.
+- Made the nested `Customer.Address` class serializable.
+- Created the `StatePersister` class to save and load an array of `Account` objects.
+- Used `ObjectOutputStream` to serialize account data.
+- Used `ObjectInputStream` to deserialize account data into a new `Account[]`.
+- Implemented try-with-resources for object input and output streams.
+- Added account-counter synchronization after loading saved accounts to avoid duplicate account numbers.
+- Created the `TransactionLog` class to append transaction records to log files.
+- Used `Files.write()` with `CREATE` and `APPEND` options to maintain transaction logs.
+- Created the `ReportGenerator` class to process transaction log files using Java NIO.
+- Used `Files.newDirectoryStream()` to iterate through the log directory.
+- Used `BufferedReader` to read transaction logs line by line.
+- Used `Files.readAttributes()` and `BasicFileAttributes` to retrieve file size and last-modified time.
+- Calculated total deposits and withdrawals using `long` variables.
+- Calculated the net transaction change.
+- Generated and saved a formatted banking transaction report.
+- Integrated serialization, transaction logging and report generation into the existing MiniBank application.
+- Verified that saved account numbers and balances are restored correctly after loading.
+
+**New source files:**
+
+- `Miniproject/src/service/StatePersister.java`
+- `Miniproject/src/service/TransactionLog.java`
+- `Miniproject/src/service/ReportGenerator.java`
+
+**Modified source files:**
+
+- `Miniproject/src/model/Account.java`
+- `Miniproject/src/model/Customer.java`
+- `Miniproject/src/model/SavingsAccount.java`
+- `Miniproject/src/model/CurrentAccount.java`
+- `Miniproject/src/model/FixedDepositAccount.java`
+- `Miniproject/src/service/MiniBank.java`
+
+**Generated data files:**
+
+- `Miniproject/data/accounts.dat`
+- `Miniproject/data/logs/transactions.log`
+- `Miniproject/data/bank-report.txt`
+
+These files are generated when MiniBank runs and are excluded from version control.
+
+**Verified transaction report:**
+
+| Transaction Summary | Amount |
+|---|---:|
+| Total Deposits | Rs. 1,500 |
+| Total Withdrawals | Rs. 200 |
+| Net Change | Rs. 1,300 |
+
+**Key concepts:** `Serializable`, `serialVersionUID`, `transient`, `ObjectOutputStream`, `ObjectInputStream`, serialization, deserialization, try-with-resources, `Path`, `Files`, `Files.write()`, `StandardOpenOption.CREATE`, `StandardOpenOption.APPEND`, `DirectoryStream`, `BufferedReader`, `BasicFileAttributes`, file metadata and Java NIO.
+
 ---
 
 ## Requirements
@@ -878,6 +976,35 @@ java DeadlockDemo
 Pop-Location
 ```
 
+### Lab 11 – Part A
+
+**Practical 1 – Save and Load Objects**
+
+```powershell
+Push-Location .\lab-11\Practical-1
+javac *.java
+java Driver
+Pop-Location
+```
+
+**Practical 2 – Log Analyzer**
+
+```powershell
+Push-Location .\lab-11\Practical-2
+javac *.java
+java Driver
+Pop-Location
+```
+
+**Practical 3 – Folder Tree Report**
+
+```powershell
+Push-Location .\lab-11\Practical-3
+javac *.java
+java Driver
+Pop-Location
+```
+
 ### MiniBank – Part B
 
 **Compile the complete MiniBank project from source**
@@ -899,6 +1026,21 @@ This compiles all Java source files, including the exception, model, service, ut
 
 ```powershell
 java -cp .\Miniproject\build service.MiniBank
+```
+
+The application demonstrates the MiniBank features, including concurrency, account transfers, serialization, transaction logging and report generation.
+
+**Practical 11 generated files**
+
+After running MiniBank, the following files are generated automatically:
+
+```text
+Miniproject/
+└── data/
+    ├── accounts.dat
+    ├── logs/
+    │   └── transactions.log
+    └── bank-report.txt
 ```
 
 **Create or update the runnable MiniBank JAR**
@@ -937,6 +1079,7 @@ The following Git tags mark the completion of each laboratory:
 - `lab-08` – Lab 08 completed.
 - `lab-09` – Lab 09 completed.
 - `lab-10` – Lab 10 completed.
+- `lab-11` – Lab 11 completed.
 
 ## Author
 
@@ -945,3 +1088,4 @@ The following Git tags mark the completion of each laboratory:
 B.Tech – Computer Science and Engineering  
 CSPIT, CHARUSAT  
 Academic Year 2026–27
+```
