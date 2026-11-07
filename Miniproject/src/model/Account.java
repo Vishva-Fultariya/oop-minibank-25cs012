@@ -12,7 +12,7 @@ import model.annotation.Id;
 import model.annotation.MaxLength;
 import model.annotation.Positive;
 
-public abstract class Account implements Serializable, Transactable, InterestBearing {
+public abstract class Account implements Serializable, Transactable, InterestBearing, Comparable<Account> {
 
     private static final long serialVersionUID = 1L;
 
@@ -268,5 +268,11 @@ public abstract class Account implements Serializable, Transactable, InterestBea
         }
 
         accountCounter = Math.max(accountCounter, maximumNumber + 1);
+    }
+
+    @Override
+    public int compareTo(Account other) {
+
+        return this.accountNumber.compareTo(other.accountNumber);
     }
 }

@@ -1088,4 +1088,4 @@ The following Git tags mark the completion of each laboratory:
 B.Tech – Computer Science and Engineering  
 CSPIT, CHARUSAT  
 Academic Year 2026–27
-```
+
